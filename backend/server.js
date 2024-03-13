@@ -9,6 +9,8 @@ const Coin = require("./models/coin");
 //express app
 const app = express();
 
+app.use(express.json());
+
 //routes
 app.use("/api/coin", AllRoutes);
 
