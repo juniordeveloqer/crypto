@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const AllRoutes = require("./routes/crypto");
+const UserRoutes = require("./routes/user");
 const axios = require("axios");
 const Coin = require("./models/coin");
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 //routes
 app.use("/api/coin", AllRoutes);
+app.use("/api/user", UserRoutes);
 
 //connect mangodb
 mongoose
