@@ -1,3 +1,4 @@
+import { Titillium_Web } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -27,7 +28,11 @@ const config: Config = {
       100: "100",
     },
 
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-titillium_web)"],
+      },
+    },
   },
   plugins: [],
 };
