@@ -32,7 +32,7 @@ const Login = () => {
             {/* Placeholders */}
             <div className="flex flex-col gap-4  ">
               {" "}
-              q{/* Placeholder-box */}
+              {/* Placeholder-box */}
               <label className="relative block">
                 <span className="sr-only">Search</span>
                 <span className="absolute inset-y-0 left-0 flex items-center pl-2">
