@@ -11,15 +11,20 @@ const config: Config = {
     colors: {
       Primary: "#1A1E24",
       Secondary: "#FFFFFF",
-      BackgroundPrimary: "#000000",
+      BackgroundPrimary: "#1A1E24",
       BackgroundSecondary: "#FFFFFF",
       textPrimary: "#FFFFFF",
+      PlaceholderColor: "#DCDCDC",
       button: {
-        Primary: "#55A96D",
-        Secondary: "#256738",
-        Text: "#FFFFFF",
+        Primary: "#26C553",
+        Secondary: "#27A84C",
+        Text: "#0B6100",
+        Hover: "#80F87E",
+        HoverSecondary: "#258F43",
+        Login: "#263238",
       },
     },
+
     zIndex: {
       60: "60",
       70: "70",
@@ -28,9 +33,25 @@ const config: Config = {
       100: "100",
     },
 
+    width: {
+      navbar: "72%",
+    },
+
     extend: {
       fontFamily: {
         sans: ["var(--font-titillium_web)"],
+      },
+      screens: {
+        sm: "640px",
+        // => @media (min-width: 640px) { ... }
+
+        md: "1439px",
+
+        lg: "1440px",
+      },
+      maxWidth: {
+        desktop: "1440px",
+        navbar: "72%",
       },
     },
   },
