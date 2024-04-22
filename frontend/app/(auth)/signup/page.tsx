@@ -3,16 +3,17 @@ import React, { FormEvent, useState } from "react";
 import Image from "next/image";
 import EmailIcon from "@/public/icons/Email-username.svg";
 import PasswordIcon from "@/public/icons/password.svg";
-import { useLogin } from "@/hooks/UseLogin";
+import { useSignup } from "@/hooks/UseSignup";
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error, isLoading } = useLogin();
+  const { signup, error, isLoading } = useSignup();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await login(email, password);
+    await signup(email, password);
   };
 
   return (
@@ -39,7 +40,7 @@ const Login = () => {
           </div>
           {/* text */}
           <span className="text-[15px] text-Primary flex justify-center    text-center font-semibold pb-11 ">
-            Login to track your favorite coin
+            Signup to track your action
             <span className="text-button-HoverSecondary pl-1">easily</span>
           </span>
           {/* Placeholders */}
@@ -86,7 +87,7 @@ const Login = () => {
               className="flex-grow text-Secondary font-semibold justify-between text-[15px] text-center py-3  bg-button-Login 
                    rounded-sm  "
             >
-              Log in
+              Sign up
             </button>
             {error && <div>{error}</div>}
           </div>
@@ -104,4 +105,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

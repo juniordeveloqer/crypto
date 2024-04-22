@@ -1,3 +1,9 @@
-export default function Home() {
-  return <main className="bg-no-repeat"></main>;
-}
+import React from "react";
+
+type Props = {};
+
+const page = (props: Props) => {
+  return <div>page</div>;
+};
+
+export default page;

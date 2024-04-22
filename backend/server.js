@@ -6,9 +6,11 @@ const AllRoutes = require("./routes/crypto");
 const UserRoutes = require("./routes/user");
 const axios = require("axios");
 const Coin = require("./models/coin");
+const cors = require("cors");
 
 //express app
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 
