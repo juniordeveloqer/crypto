@@ -20,7 +20,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.4.0",
     "mongoose": "^8.2.1",
+    "node": "^20.12.2",
     "nodemon": "^3.1.0",
+    "punycode": "^2.3.1",
+    "uri-js": "^4.4.1",
     "validator": "^13.11.0"
   }
 }

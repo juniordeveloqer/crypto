@@ -4,8 +4,10 @@ import Image from "next/image";
 import EmailIcon from "@/public/icons/Email-username.svg";
 import PasswordIcon from "@/public/icons/password.svg";
 import { useLogin } from "@/hooks/UseLogin";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, isLoading } = useLogin();
@@ -82,6 +84,7 @@ const Login = () => {
           <div className="relative  pt-[30px] justify-center flex ">
             <span className="sr-only">Search</span>
             <button
+              onClick={() => router.push("/")}
               disabled={isLoading !== null && isLoading}
               className="flex-grow text-Secondary font-semibold justify-between text-[15px] text-center py-3  bg-button-Login 
                    rounded-sm  "
