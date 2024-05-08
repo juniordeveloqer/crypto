@@ -2,14 +2,15 @@
 
 import { createContext, useReducer, ReactNode, useEffect } from "react";
 
-// Tanımlamaları yapalım
-type User = { email: string }; // Kullanıcı veri yapısı
+type User = {
+  role: string;
+  _id: string;
+  email: string;
+};
 type State = { user: User | null }; // State yapısı
 
-// Action türleri
 type Action = { type: "LOGIN"; payload: User } | { type: "LOGOUT" };
 
-// Context tipi
 type ContextType = {
   state: State;
   dispatch: React.Dispatch<Action>;
@@ -30,7 +31,6 @@ const authReducer = (state: State, action: Action): State => {
   }
 };
 
-// AuthContext'i oluştur
 export const AuthContext = createContext<ContextType>({
   state: initialState,
   dispatch: () => null,

@@ -48,7 +48,7 @@ const Login = () => {
           <div className="flex flex-col gap-4  ">
             {" "}
             {/* Placeholder-box */}
-            <label className="relative block">
+            <div className="relative block">
               <span className="sr-only">Search</span>
               <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                 <Image src={EmailIcon} alt="EmailIcon" />
@@ -62,7 +62,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
-            </label>
+            </div>
             {/* Placeholder-box */}
             <label className="relative block ">
               <span className="sr-only">Search</span>
