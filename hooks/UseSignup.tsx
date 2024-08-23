@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UseAuthContext } from "./UseAuthContext";
 
 export const useSignup = () => {
+  // Error türünü string | null olarak tanımla
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { dispatch } = UseAuthContext();
@@ -11,11 +12,10 @@ export const useSignup = () => {
     setError(null);
 
     try {
-      const response = await fetch("/api/user/signup", { // `localhost:3000` kısmını kaldırdım; Next.js ortamında bu genellikle gerekmez
+      const response = await fetch("/api/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // `credentials` ve `Authorization` başlıkları gerekli değilse kaldırabilirsiniz
         },
         body: JSON.stringify({ email, password }),
       });
@@ -29,6 +29,9 @@ export const useSignup = () => {
 
         // Auth context'i güncelle
         dispatch({ type: "LOGIN", payload: json });
+
+        // Başarıyla kayıt olduktan sonra yönlendirme yap
+        window.location.href = "/"; // Ana sayfaya yönlendir
       } else {
         const json = await response.json();
         setError(json.error || "Unknown error occurred");

@@ -1,7 +1,5 @@
-// pages/api/user/signup.js
-import connectToDatabase from "../../../lib/dbConnect"; // MongoDB bağlanma fonksiyonunun yolu
-
-import User from "../../models/userModel"; // Model dosya yolunu kontrol edin
+import connectToDatabase from "../../../lib/dbConnect"; // MongoDB bağlantısı
+import User from "../../../models/userModel"; // Model dosya yolunu kontrol edin
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 
@@ -18,16 +16,14 @@ export default async function handler(req, res) {
     }
 
     try {
-      await connectToDatabase(); // MongoDB bağlantısını burada başlat
-      const user = await User.signup(email, password);
+      await connectToDatabase(); // MongoDB bağlantısını başlat
+      const user = await User.signup(email, password); // Kullanıcı kaydet
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ error: "Signup failed, user not created." });
+        return res.status(400).json({ error: "Signup failed, user not created." });
       }
 
-      const token = createToken(user._id);
+      const token = createToken(user._id); // Token oluştur
       res.setHeader(
         "Set-Cookie",
         cookie.serialize("token", token, {
@@ -37,6 +33,7 @@ export default async function handler(req, res) {
         })
       );
 
+      // Başarıyla kayıt olduktan sonra, istemciye başarı durumunu döndür
       return res.status(200).json({ email });
     } catch (error) {
       console.error("Signup error:", error.message);

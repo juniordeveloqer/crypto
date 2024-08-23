@@ -33,6 +33,7 @@ userSchema.statics.login = async function (email, password) {
   throw Error("Invalid email or password");
 };
 
-const User = mongoose.model("User", userSchema);
+// Modeli tekrar tanımlamamak için kontrol ekliyoruz
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;

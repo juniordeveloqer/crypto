@@ -1,8 +1,9 @@
+import connectToDatabase from '../../../lib/dbConnect'; // MongoDB bağlantısı
+import User from '../../../models/userModel'; // Model dosya yolunu kontrol edin
 import jwt from 'jsonwebtoken';
-import User from '../../../models/userModel'; // Yolu kontrol edin
 import cookie from 'cookie';
 
-// Create token
+// Token oluştur
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
 };
@@ -17,16 +18,21 @@ export default async function handler(req, res) {
     }
 
     try {
+      await connectToDatabase(); // MongoDB bağlantısını başlat
       const user = await User.login(email, password);
 
-      // Create a token
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid credentials.' });
+      }
+
+      // Token oluştur
       const token = createToken(user._id);
       if (!token) throw new Error('Token creation failed.');
 
-      // Set token in cookie
+      // Çerezi ayarla
       res.setHeader('Set-Cookie', cookie.serialize('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Ensure secure cookies in production
+        secure: process.env.NODE_ENV === 'production', // Üretim ortamında güvenli çerezler
         maxAge: 3 * 24 * 60 * 60,
         path: '/',
       }));

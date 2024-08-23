@@ -3,7 +3,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { SessionPayload, User } from "@/lib/definitions";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.SESSION_SECRET;
+const secretKey = process.env.SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
 // Encrypt payload and generate JWT
@@ -34,7 +34,6 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-// Create and set session cookie
 export async function createSession(user: User) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
@@ -47,7 +46,7 @@ export async function createSession(user: User) {
 
   const session = await encrypt(sessionPayload);
 
-  cookies().set("session", session, {
+  cookies().set("token", session, { // Çerez adı 'token' olarak güncellendi
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -58,9 +57,9 @@ export async function createSession(user: User) {
   return session;
 }
 
-// Update session expiration time
+
 export async function updateSession() {
-  const session = cookies().get("session")?.value;
+  const session = cookies().get("token")?.value; // Çerez adı 'token' olarak güncellendi
   const payload = await decrypt(session);
 
   if (!session || !payload) {
@@ -78,7 +77,7 @@ export async function updateSession() {
 
   const newSession = await encrypt(newSessionPayload);
 
-  cookies().set("session", newSession, {
+  cookies().set("token", newSession, { // Çerez adı 'token' olarak güncellendi
     httpOnly: true,
     secure: true,
     expires: newExpiresAt,
@@ -89,7 +88,8 @@ export async function updateSession() {
   return newSession;
 }
 
+
 // Delete session cookie
 export function deleteSession() {
-  cookies().delete("session");
+  cookies().delete("token");  // Çerez adı burada 'token'
 }

@@ -1,22 +1,22 @@
 import { useState } from "react";
+import { useRouter } from 'next/navigation'
 import { UseAuthContext } from "./UseAuthContext";
 
 export const useLogin = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { dispatch } = UseAuthContext();
+  const router = useRouter(); // Router'ı kullanmak için ekledik
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/login", {
+      const response = await fetch("/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          credentials: 'include', // Cookie'leri göndermek için
-
         },
         body: JSON.stringify({ email, password }),
       });
@@ -27,17 +27,21 @@ export const useLogin = () => {
 
         if (!response.ok) {
           setIsLoading(false);
-          setError(json.error);
+          setError(json.error || "Unknown error occurred");
           console.log("Login failed:", json.error);
           return;
         }
 
-        // Giriş başarılı, token'ı kaydedin
+        // Giriş başarılı, token'ı localStorage'a kaydedin
         localStorage.setItem("user", JSON.stringify(json));
         console.log("Storing user data in localStorage:", json);
 
-        // `dispatch` ile login aksiyonu gönder
+        // Auth context'i güncelle
         dispatch({ type: "LOGIN", payload: json });
+
+        // Başarıyla giriş yaptıktan sonra yönlendirme yap
+        router.push("/"); // Ana sayfaya yönlendir
+
         setIsLoading(false);
         console.log("Login successful");
       } else {
@@ -48,7 +52,7 @@ export const useLogin = () => {
     } catch (err) {
       setIsLoading(false);
       setError("Failed to login");
-      console.log("Failed to login:", err);
+      console.error("Failed to login:", err);
     }
   };
 
