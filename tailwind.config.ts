@@ -1,7 +1,5 @@
-import { Titillium_Web } from "next/font/google";
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+// tailwind.config.js
+const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -16,13 +14,7 @@ const config: Config = {
         90: "90",
         100: "100",
       },
-
-      width: {
-        navbar: "72%",
-      },
-
       colors: {
-          
         Primary: "#1A1E24",
         Secondary: "#FFFFFF",
         BackgroundPrimary: "#1A1E24",
@@ -40,24 +32,23 @@ const config: Config = {
           Login: "#263238",
         },
       },
-
       fontFamily: {
         sans: ["var(--font-titillium_web)"],
       },
       screens: {
         sm: "640px",
-        // => @media (min-width: 640px) { ... }
-
         md: "1439px",
-
         lg: "1440px",
       },
       maxWidth: {
         desktop: "1440px",
         navbar: "72%",
+        section: "80%",
+        screen: "100vw",
       },
     },
   },
   plugins: [],
 };
+
 export default config;
