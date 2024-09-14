@@ -4,37 +4,28 @@
 
 .typed-cursor {
   font-size: 64px; /* Cursor boyutunu büyütmek için font-size */
- 
 }
 
 .scroller {
-  max-width: 600px;
-}
-
-.scroller__inner {
-  padding-block: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.scroller[data-animated="true"] {
+  width: 80%; /* Sayfa genişliğinin %80'i olacak */
+  margin: 0 auto; /* Ortalamak için */
   overflow: hidden;
   -webkit-mask: linear-gradient(
     90deg,
     transparent,
-    white 20%,
-    white 80%,
+    black 20%,
+    black 80%,
     transparent
   );
-  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+  mask: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
 }
 
-.scroller[data-animated="true"] .scroller__inner {
+.scroller__inner {
+  display: flex;
+  gap: 70px; /* Kutular arası boşluk */
   width: max-content;
-  flex-wrap: nowrap;
-  animation: scroll var(--_animation-duration, 40s)
-    var(--_animation-direction, forwards) linear infinite;
+  padding-block: 1rem;
+  animation: scroll var(--_animation-duration, 22s) linear infinite;
 }
 
 .scroller[data-direction="right"] {
@@ -45,44 +36,23 @@
   --_animation-direction: forwards;
 }
 
-.scroller[data-speed="fast"] {
-  --_animation-duration: 20s;
-}
-
-.scroller[data-speed="medium"] {
-  --_animation-duration: 40s;
-}
-
-.scroller[data-speed="slow"] {
-  --_animation-duration: 60s;
-}
-
+/* İlk scroller için değişiklik yapmıyoruz, sabit hız ve animasyon */
 @keyframes scroll {
   to {
-    transform: translate(calc(-50% - 0.5rem));
+    transform: translateX(calc(-50% - 2.25rem));
   }
 }
 
-/* Genel stiller */
-:root {
-  --clr-neutral-100: hsl(0, 0%, 100%);
-  --clr-primary-100: hsl(205, 15%, 58%);
-  --clr-primary-400: hsl(215, 25%, 27%);
-  --clr-primary-800: hsl(217, 33%, 17%);
-  --clr-primary-900: hsl(218, 33%, 9%);
+/* .row1 için kaydırma animasyonu */
+.row1 .scroller__inner {
+  animation: scroll var(--_animation-duration, 22s) linear infinite;
+  animation-delay: -5s; /* 5 saniyelik gecikme */
 }
 
-html {
-  color-scheme: dark;
-}
-
-.scroller-body {
-  display: grid;
-  min-block-size: 100vh;
-  place-content: center;
-  font-family: system-ui;
-  font-size: 1.125rem;
-  background-color: black; /* Arka plan siyah */
+/* .row2 için kaydırma animasyonu */
+.row2 .scroller__inner {
+  animation: scroll var(--_animation-duration, 22s) linear infinite;
+  animation-delay: -10s; /* 10 saniyelik gecikme */
 }
 
 .tag-list {
@@ -93,16 +63,13 @@ html {
 
 .tag-list li {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 1rem;
-  background: white; /* Kutular beyaz */
-  border-radius: 0.5rem;
-  box-shadow: 0 0.5rem 1rem -0.25rem var(--clr-primary-900);
+  width: 130px; /* Sabit genişlik */
+  height: 40px; /* Sabit yükseklik */
+  background: white; /* Beyaz kutular */
+  border-radius: 9999px; /* Tam yuvarlak köşeler */
+  color: black; /* Siyah metin */
   font-weight: bold;
-}
-
-.tag-list li img {
-  width: 2rem;
-  height: 2rem;
+  box-shadow: 0 0.5rem 1rem -0.25rem rgba(0, 0, 0, 0.1);
 }

@@ -14,70 +14,53 @@ const Scroller: React.FC = () => {
         scrollerContent.forEach((item) => {
           const duplicatedItem = item.cloneNode(true) as HTMLElement;
           duplicatedItem.setAttribute('aria-hidden', 'true');
+
           scrollerInner?.appendChild(duplicatedItem);
         });
       });
     }
   }, []);
 
-  const coinLogos = [
-    "/images/coin1.png",
-    "/images/coin2.png",
-    "/images/coin3.png",
-    "/images/coin4.png",
+  const coinNames = [
+    "Bitcoin",
+    "Ethereum",
+    "Ripple",
+    "Litecoin",
+    "Cardano",
+    "Polkadot",
+    "Chainlink",
+    "Stellar"
   ];
 
   return (
     <div>
-      <h1 className="text-center text-white">Infinite Scroll Animation</h1>
+      <h1 className="text-center text-white mb-6">Infinite Scroll Animation</h1>
 
-      {/* İlk animasyon */}
       <div className="scroller" data-speed="fast">
         <ul className="tag-list scroller__inner">
-          <li><span>Bitcoin</span><img src={coinLogos[0]} alt="Bitcoin" /></li>
-          <li><span>Ethereum</span><img src={coinLogos[1]} alt="Ethereum" /></li>
-          <li><span>Ripple</span><img src={coinLogos[2]} alt="Ripple" /></li>
-          <li><span>Litecoin</span><img src={coinLogos[3]} alt="Litecoin" /></li>
+          {coinNames.map((name, index) => (
+            <li key={index} className="coin-box">
+              <span>{name}</span>
+            </li>
+          ))}
         </ul>
       </div>
-
-      {/* İkinci animasyon */}
-      <div className="scroller" data-direction="right" data-speed="slow">
+      <div className="scroller row1" data-speed="fast">
         <ul className="tag-list scroller__inner">
-          <li><span>Bitcoin</span><img src={coinLogos[0]} alt="Bitcoin" /></li>
-          <li><span>Ethereum</span><img src={coinLogos[1]} alt="Ethereum" /></li>
-          <li><span>Ripple</span><img src={coinLogos[2]} alt="Ripple" /></li>
-          <li><span>Litecoin</span><img src={coinLogos[3]} alt="Litecoin" /></li>
+          {coinNames.map((name, index) => (
+            <li key={index} className="coin-box">
+              <span>{name}</span>
+            </li>
+          ))}
         </ul>
       </div>
-
-      {/* Üçüncü animasyon */}
-      <div className="scroller" data-speed="medium">
+      <div className="scroller row2" data-speed="fast">
         <ul className="tag-list scroller__inner">
-          <li><span>Bitcoin</span><img src={coinLogos[0]} alt="Bitcoin" /></li>
-          <li><span>Ethereum</span><img src={coinLogos[1]} alt="Ethereum" /></li>
-          <li><span>Ripple</span><img src={coinLogos[2]} alt="Ripple" /></li>
-          <li><span>Litecoin</span><img src={coinLogos[3]} alt="Litecoin" /></li>
-        </ul>
-      </div>
-
-      {/* Dördüncü animasyon */}
-      <div className="scroller" data-direction="left" data-speed="fast">
-        <ul className="tag-list scroller__inner">
-          <li><span>Bitcoin</span><img src={coinLogos[0]} alt="Bitcoin" /></li>
-          <li><span>Ethereum</span><img src={coinLogos[1]} alt="Ethereum" /></li>
-          <li><span>Ripple</span><img src={coinLogos[2]} alt="Ripple" /></li>
-          <li><span>Litecoin</span><img src={coinLogos[3]} alt="Litecoin" /></li>
-        </ul>
-      </div>
-
-      {/* Beşinci animasyon */}
-      <div className="scroller" data-speed="slow">
-        <ul className="tag-list scroller__inner">
-          <li><span>Bitcoin</span><img src={coinLogos[0]} alt="Bitcoin" /></li>
-          <li><span>Ethereum</span><img src={coinLogos[1]} alt="Ethereum" /></li>
-          <li><span>Ripple</span><img src={coinLogos[2]} alt="Ripple" /></li>
-          <li><span>Litecoin</span><img src={coinLogos[3]} alt="Litecoin" /></li>
+          {coinNames.map((name, index) => (
+            <li key={index} className="coin-box">
+              <span>{name}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
