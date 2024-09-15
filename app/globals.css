@@ -25,7 +25,7 @@
   gap: 70px; /* Kutular arası boşluk */
   width: max-content;
   padding-block: 1rem;
-  animation: scroll var(--_animation-duration, 22s) linear infinite;
+  animation: scroll var(--_animation-duration, 40s) linear infinite;
 }
 
 .scroller[data-direction="right"] {
@@ -36,23 +36,10 @@
   --_animation-direction: forwards;
 }
 
-/* İlk scroller için değişiklik yapmıyoruz, sabit hız ve animasyon */
 @keyframes scroll {
   to {
-    transform: translateX(calc(-50% - 2.25rem));
+    transform: translate(calc(-50% - 35px));
   }
-}
-
-/* .row1 için kaydırma animasyonu */
-.row1 .scroller__inner {
-  animation: scroll var(--_animation-duration, 22s) linear infinite;
-  animation-delay: -5s; /* 5 saniyelik gecikme */
-}
-
-/* .row2 için kaydırma animasyonu */
-.row2 .scroller__inner {
-  animation: scroll var(--_animation-duration, 22s) linear infinite;
-  animation-delay: -10s; /* 10 saniyelik gecikme */
 }
 
 .tag-list {
