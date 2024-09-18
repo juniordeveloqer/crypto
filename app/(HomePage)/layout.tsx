@@ -1,4 +1,5 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import "../globals.css";
 import titillium_Web from "../fonts";
 import { AuthContextProvider } from "@/context/AuthContext";
@@ -15,6 +16,7 @@ export default function RootLayout({
         <AuthContextProvider>
           <Navbar />
           {children}
+          <Footer/>
         </AuthContextProvider>
       </body>
       </html>

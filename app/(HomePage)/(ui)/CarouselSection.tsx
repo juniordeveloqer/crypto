@@ -1,4 +1,4 @@
-import Scroller from "../../components/Carousel";
+import Scroller from "../../components/carousel";
 
 export default function Home() {
   return (

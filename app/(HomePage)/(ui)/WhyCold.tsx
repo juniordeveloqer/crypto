@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import simplicty from "@/public/images/simplicty.png";
-import secure from "@/public/images/secure.png";
-import earn from "@/public/images/earn.png";
+import simplicty from "@/public/images/simplicty.svg";
+import secure from "@/public/images/secure.svg";
+import earn from "@/public/images/earn.svg";
 
 const WhyCold = () => {
   return (
-    <section className="h-full bg-black text-[#ffffff] ">
+    <section className="min-h-lvh bg-black text-[#ffffff] ">
       <div className="max-w-[1920px] mx-auto">
         <h1 className="text-center  text-[40px] pt-12 font-semibold">
           Why Cold?
@@ -15,23 +15,20 @@ const WhyCold = () => {
           <Image
             src={simplicty}
             alt="Picture of the author"
-            width={350}
-            height={350}
+          
           />
           <Image
             src={earn}
             alt="Picture of the author"
-            width={350}
-            height={350}
+           
           />
           <Image
             src={secure}
             alt="Picture of the author"
-            width={350}
-            height={350}
+        
           />
         </div>
-        <div className="flex mt-24 justify-center gap-[230px] ">
+        <div className="flex mt-24 justify-center gap-[170px] ">
           <div>
             <h1 className="text-center text-[32px] font-semibold">
               Simplicity

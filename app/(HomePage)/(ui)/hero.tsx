@@ -91,7 +91,7 @@ const Hero: React.FC = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <section className=" flex justify-between   max-w-section   h-full mx-auto text-white  ">
+    <section className=" flex justify-between   max-w-section  h-lvh   mx-auto text-white  ">
       <div className="w-full flex justify-between">
         <div className=" pt-[90px] ">
           <p className="text-[64px] "> Earn with Crypto</p>
