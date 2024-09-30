@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import simplicty from "@/public/images/simplicty.svg";
@@ -46,7 +48,7 @@ const WhyCold = () => {
               this platform <br />sets the 
               standard for <br />excellence.
             </p>
-          </div>
+          </div> 
           <div>
             <h1 className="text-center text-[32px] font-semibold">Secure</h1>
             <p className="text-center text-[20px]">

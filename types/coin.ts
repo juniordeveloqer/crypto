@@ -7,4 +7,3 @@ export interface Coin {
     marketCap: number;
     changePercentage: number;
   }
-  

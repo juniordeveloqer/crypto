@@ -1,4 +1,3 @@
-// components/Nfts.tsx
 
 export interface NftInfo {
   name: string;

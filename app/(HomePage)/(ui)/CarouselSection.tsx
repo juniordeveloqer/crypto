@@ -1,3 +1,5 @@
+"use client";
+
 import Scroller from "../../components/carousel";
 
 export default function Home() {

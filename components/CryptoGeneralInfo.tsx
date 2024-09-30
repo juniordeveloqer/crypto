@@ -1,3 +1,4 @@
+
 const COINS_INFO_URL = 'https://min-api.cryptocompare.com/data/coin/generalinfo';
 const API_KEY = '1162f895434ff38066365c8eaecbe9415a1e8d25569f1f7ca848e8529d83a8a1';
 
@@ -8,7 +9,7 @@ export interface CoinInfo {
   ImageUrl: string;
 }
 
-export const fetchCoinInfo = async (fsyms: string[]): Promise<CoinInfo[]> => {
+export const fetchgeneralinfo = async (fsyms: string[]): Promise<CoinInfo[]> => {
   try {
     const response = await fetch(`${COINS_INFO_URL}?fsyms=${fsyms.join(',')}&tsym=USD&api_key=${API_KEY}`);
     if (!response.ok) {

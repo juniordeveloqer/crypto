@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchCoinInfo, CoinInfo } from "../../components/CryptoGeneralInfo";
+import { fetchgeneralinfo, CoinInfo } from "../../components/CryptoGeneralInfo";
 
 const Scroller: React.FC = () => {
   const [coinData, setCoinData] = useState<CoinInfo[]>([]);
@@ -69,7 +69,7 @@ const Scroller: React.FC = () => {
         "NANO",
       ];
 
-      const data = await fetchCoinInfo(coinSymbols);
+      const data = await fetchgeneralinfo(coinSymbols);
       setCoinData(data);
     };
 

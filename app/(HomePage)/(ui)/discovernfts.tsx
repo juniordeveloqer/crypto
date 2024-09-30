@@ -1,3 +1,5 @@
+
+
 import React from 'react'
 import nft from '@/public/images/nft.svg'
 import Image from 'next/image'

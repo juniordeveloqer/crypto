@@ -1,4 +1,4 @@
-"use client";
+
 
 import HeroSection from "./(ui)/hero";
 import CarouselSection from "./(ui)/carouselsection"
@@ -9,7 +9,7 @@ import DiscoverNfts from "./(ui)/discovernfts";
 const HomePage = ({ children }: { children: React.ReactNode }) => {
   return (
     <section className="bg-black ">
-      <HeroSection />
+      <HeroSection  />
     <CarouselSection />
     <WhyCold/>
     <DiscoverNfts/>
