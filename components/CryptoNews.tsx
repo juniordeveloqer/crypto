@@ -14,8 +14,17 @@ export interface NewsArticle {
   const API_KEY = '1162f895434ff38066365c8eaecbe9415a1e8d25569f1f7ca848e8529d83a8a1';
   
   export const fetchNews = async (): Promise<NewsArticle[]> => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "Cache-Control": "no-store", // Burada no-store başlığı ekledik
+        "api_key": API_KEY, // API Key'i header olarak da ekledik
+      },
+    };
+  
     try {
-      const response = await fetch(`${NEWS_URL}&api_key=${API_KEY}`);
+      const response = await fetch(`${NEWS_URL}`, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

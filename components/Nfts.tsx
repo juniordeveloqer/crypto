@@ -5,12 +5,17 @@ export interface NftInfo {
 }
 
 export const fetchNftInfo = async (): Promise<NftInfo[]> => {
-  const options = {
+  const options: RequestInit = {
     method: "GET",
     headers: {
       accept: "application/json",
       "x-api-key": "2911ba78c9124dab86df685f150920fd",
+       'Pragma': 'no-cache',
+  'Expires': '0',
+
     },
+    cache: "no-store" as RequestCache, 
+    
   };
 
   try {
@@ -25,17 +30,16 @@ export const fetchNftInfo = async (): Promise<NftInfo[]> => {
     const data = await response.json();
     console.log("Fetched data:", data);
 
-    // NFT'lerin bilgilerini çıkart
+    // Process NFTs
     if (data && Array.isArray(data.orders)) {
       const allNfts = data.orders.flatMap(
         (order) =>
           order.maker_asset_bundle?.assets?.map((asset) => ({
-            name: asset.name || "Unnamed", // Varsayılan bir değer sağlandı
-            image_url: asset.image_url || "https://via.placeholder.com/150", // Varsayılan bir görsel URL'si sağlandı
+            name: asset.name || "Unnamed", // Default name
+            image_url: asset.image_url || "https://via.placeholder.com/150", // Default image
           })) || []
       );
 
-      // İlk 6 NFT'yi döndür
       return allNfts.slice(0, 6);
     } else {
       console.error("Expected data structure is missing:", data);
