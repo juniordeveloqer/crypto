@@ -20,7 +20,9 @@ export default async function handler(req, res) {
       const user = await User.signup(email, password); // Kullanıcı kaydet
 
       if (!user) {
-        return res.status(400).json({ error: "Signup failed, user not created." });
+        return res
+          .status(400)
+          .json({ error: "Signup failed, user not created." });
       }
 
       const token = createToken(user._id); // Token oluştur

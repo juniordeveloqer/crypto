@@ -10,8 +10,7 @@ export const fetchNftInfo = async (): Promise<NftInfo[]> => {
     headers: {
       accept: "application/json",
       "x-api-key": "2911ba78c9124dab86df685f150920fd",
-       'Pragma': 'no-cache',
-  'Expires': '0',
+  
 
     },
     cache: "no-store" as RequestCache, 
@@ -28,7 +27,7 @@ export const fetchNftInfo = async (): Promise<NftInfo[]> => {
     }
 
     const data = await response.json();
-    console.log("Fetched data:", data);
+ 
 
     // Process NFTs
     if (data && Array.isArray(data.orders)) {

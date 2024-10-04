@@ -1,15 +1,17 @@
-"use client"; // Sadece bu dosyada client-side rendering kullanılıyor
+"use client"; // Only client-side rendering is used in this file
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import Typed from "typed.js";
+import { useTypedStrings } from "@/components/useTypedStrings";
 
 const TypedAnimation = () => {
   const typedElement = useRef<HTMLSpanElement>(null);
+  const { strings, isLoading } = useTypedStrings();
 
   useEffect(() => {
-    if (typedElement.current) {
+    if (typedElement.current && !isLoading) {
       const typed = new Typed(typedElement.current, {
-        strings: ["Fast.", "Secure.", "Simple."],
+        strings: strings,
         typeSpeed: 100,
         backSpeed: 50,
         startDelay: 500,
@@ -22,7 +24,7 @@ const TypedAnimation = () => {
         typed.destroy();
       };
     }
-  }, []);
+  }, [strings, isLoading]);
 
   return (
     <span className="text-[64px] typed-cursor" ref={typedElement}></span>
