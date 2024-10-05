@@ -4,7 +4,9 @@ export interface NftInfo {
   image_url: string;
 }
 
-export const fetchNftInfo = async (): Promise<NftInfo[]> => {
+export const 
+
+fetchNftInfo = async (): Promise<NftInfo[]> => {
   const options: RequestInit = {
     method: "GET",
     headers: {
