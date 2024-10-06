@@ -125,7 +125,7 @@ const Hero = async () => {
                       alt={nft.name}
                       width={65}
                       height={65}
-                      className="mb-2 rounded-lg w-[65px] h-[65px]  object-fit"
+                      className="mb-2 rounded-lg w-[65px] h-[65px]  object-fit transition-transform duration-200 ease-in-out transform hover:scale-125"
                       quality={75} 
                       priority 
                       placeholder="blur"

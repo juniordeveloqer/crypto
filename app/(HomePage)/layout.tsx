@@ -3,6 +3,12 @@ import Footer from "../components/footer";
 import "../globals.css";
 import titillium_Web from "../fonts";
 import { AuthContextProvider } from "@/context/AuthContext";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'COLD', // Buraya istediğin başlığı yaz
+};
+
 
 export default function RootLayout({
   children,
@@ -12,6 +18,7 @@ export default function RootLayout({
   return (
   
       <html lang="en" className={`${titillium_Web.variable}`}>
+    
         <body>
         <AuthContextProvider>
           <Navbar />

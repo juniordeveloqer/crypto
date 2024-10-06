@@ -4,11 +4,7 @@
 
 .typed-cursor {
   font-size: 64px; /* Cursor boyutunu büyütmek için font-size */
-  
 }
-
-
-
 
 /* CAROUSEL */
 
@@ -33,8 +29,13 @@
   padding-block: 1rem;
 
   animation: scroll var(--_animation-duration, 40s) linear infinite;
-}
+  animation-play-state: running; 
 
+
+  &:hover {
+    animation-play-state: paused; 
+  }
+}
 .scroller[data-direction="right"] {
   --_animation-direction: reverse;
 }
@@ -59,11 +60,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 130px; 
+  width: 130px;
   height: 40px;
-  background: white; 
-  border-radius: 9999px; 
-  color: black; 
+  background: white;
+  border-radius: 9999px;
+  color: black;
   font-weight: bold;
   box-shadow: 0 0.5rem 1rem -0.25rem rgba(0, 0, 0, 0.1);
 }
@@ -73,6 +74,19 @@
 @layer components {
   .custombtn {
     @apply text-button-Text  bg-button-Primary   hover:bg-button-Hover hover:border-b-button-HoverSecondary
-    border-b-4 rounded-md border-b-button-Secondary  font-semibold
+    border-b-4 rounded-md border-b-button-Secondary  font-semibold;
   }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px); /* Adjust this value for more or less movement */
+  }
+}
+
+.animate-bounce {
+  animation: bounce 5s infinite; /* Adjust duration as needed */
 }

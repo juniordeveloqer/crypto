@@ -1,4 +1,4 @@
-"use client";
+
 
 import React from "react";
 import Image from "next/image";
@@ -17,16 +17,25 @@ const WhyCold = () => {
           <Image
             src={simplicty}
             alt="Picture of the author"
+            quality={75}
+            width={300}
+            height={320}
           
           />
           <Image
             src={earn}
             alt="Picture of the author"
+            quality={75}
+            width={280}
+            height={320}
            
           />
           <Image
             src={secure}
             alt="Picture of the author"
+            quality={75}
+            width={300}
+            height={320}
         
           />
         </div>

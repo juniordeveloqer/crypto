@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import { fetchgeneralinfo, CoinInfo } from "../../components/CryptoGeneralInfo";
 import ScrollerAnimation from "@/components/CarouselAnimation";
@@ -15,11 +12,8 @@ const coinSymbols = [
 ];
 
 const Scroller: React.FC = async () => {
-  // Verileri sunucu tarafında çekiyoruz.
   const coinData: CoinInfo[] = await fetchgeneralinfo(coinSymbols);
 
-
-  
   if (coinData.length === 0) {
     return <div>Loading...</div>;
   }
@@ -64,7 +58,7 @@ const Scroller: React.FC = async () => {
           </ul>
         </div>
       ))}
-<ScrollerAnimation coinData={coinData} />
+      <ScrollerAnimation coinData={coinData} />
       {/* İstenilen buton yapısı */}
       <button className="bg-button-Primary hover:bg-button-Hover !mt-14 hover:border-b-button-HoverSecondary border-b-4 rounded-md border-b-button-Secondary font-semibold py-3 px-5 text-white">
         Click Me

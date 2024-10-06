@@ -13,7 +13,7 @@ const DiscoverNfts = () => {
             src={nft} 
             alt="NFT"
            
-            className="rounded-lg object-cover"
+            className="rounded-lg object-cover animate-bounce"
           />
         </div>
         <div className="text-white max-w-lg mb-8 lg:mb-0 lg:text-left lg:mr-44">
