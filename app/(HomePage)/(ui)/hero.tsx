@@ -11,6 +11,7 @@ import TypedAnimation from "@/components/TypedAnimation";
 import CryptoPriceUpdater from "@/components/CryptoPrices";
 import { WebSocketProvider } from "@/components/WebSocketContext";
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = async () => {
   const coinSymbols = ["BTC", "ETH", "SOL"];
@@ -57,7 +58,7 @@ const Hero = async () => {
             <div>
               {coinSymbols.map((coinSymbol, index) => {
                 const coinInfo = coinInfos.find(
-                  (info) => info.Name === coinSymbol
+                  (info) => info.Name === coinSymbol,
                 );
                 const price = initialPrices[coinSymbol];
                 const change = cryptoChanges[coinSymbol];
@@ -110,6 +111,7 @@ const Hero = async () => {
 
             {/* NFT Section */}
             <div className="text-sm w-[542px] h-[130px] rounded-[20px] bg-[#1A1E24] mt-8 pt-3 overflow-x-auto">
+              <p>NFT's</p>
               <div className="flex space-x-4 items-center pl-9">
                 {nftInfos.map((nft, index) => (
                   <div key={index} className="flex-shrink-0 text-center">
@@ -126,10 +128,10 @@ const Hero = async () => {
                       width={65}
                       height={65}
                       className="mb-2 rounded-lg w-[65px] h-[65px]  object-fit transition-transform duration-200 ease-in-out transform hover:scale-125"
-                      quality={75} 
-                      priority 
+                      quality={75}
+                      priority
                       placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAZABkAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADwAPADAREAAhEBAxEB/8QAGwABAQEBAQEBAQAAAAAAAAAAAAECAwQGBQj/xAAfEAEAAQUBAQEBAQAAAAAAAAAAYQECAxITETEhQVH/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAX/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP66XAUAABKnoHoQ9BPQAKCLQD0EEAKAtKgoIB6Ii4gCAgC4FfijNQT1cVBGWlepwx0FSgAgDIoAIAAAABAQAABaVEQQABFEAXAUSoIDKiVXBmqrj1evO2rSAAAMgAAAAekE9IU9IU9VClUgoAgIAekEUQBcBQqCAz/AZXBFwSqq9LhGl9A9UPQPQZVD0inpABAABAAAFApVIkURPVggAAFFwFEBKgzUGaqAMtGPRSri0voHqwp6Qp6QqfgAUFoFBKAAAAAACAgAACAUAaAGQQwZURcEqqu3rkq0qIvop6B6CCAp6C+gegegnoHoAHoi0EAAAT0AABcBRKgn8BmvxRmoIuCKOtKuQtKgvoKKALEEE9WKekVVBIACJQKBQKeiHoAAAC4YKJ6CLglTBKgyDNWhK/DBv1zFpUGqVA9UWlQX0EAFohQUAKLSoh6iHoHoHoKCegegeqh6qnoJ6B6DPqiegz6uCeqJWoJSrCNUqC0qBSoLSoLSpBfSKekD0D0D0U9A9A9EX2UgegeqHoHoHqIeqJ6B6Ceqp6CeqM1qQT1Rn0ErVcGaXOcZWlywapUKvoVfQq+gUuFX0D2RT2QPZIHskF9kgepA9IHqh6B6B6iHoHqh6B6CeqHpBn1Rn0E9BPRWfVHOlzLDVLgapUGqVBaVUX2SB6kWnoVdgX0U9A9A9A9CnpCnpBfSB7IHoHqB6oekE9IJ6sD0ErUGa1WDNagz6CeqrjS5lhqlwlapcFapcDVLgXYhV2WFPUilLiC0uA9Fp6BsQXYgbEDYgbEKbBTYDYDYDYE2A2WCbAlbhWa3KJW4Ga3AmwPLbeyw3S9YjVLgapcotLgapcC0uBdiKbEDYVdgNiBsQXYgbEDYgbEDYgbEF2BNkgbAmyhsCbEErcRWdgZrcCbKrOwPHbejm3beDdL1GqXCNUuBqlwLS5YLS4guxFNiBsRV2IGxA2IpsQX0gbEDYgbEDYgbJBNgNgTYDYE2UZrcgzW4GdhUrcDwW3kYbtvBu28Rul6watuUapcDVLgWlxBdlguxA2SLTYhV2IU2IGywXYgbEU2IGxA2IGxBNkgbEE2IqbERK3CpW4GdkGa3EE2B+ZbkRl0tvWDdt6o1beQbtvWJW6XiNUvBaXqNUvIFLyKu6wTcirukDdYG6QXeSBuRTcgbkDdYG6QTcgm5FNxE3BN0VN5Cs7kE3QZreK/JtySmI6W5FR0tvlWW7bwapeqN0vWDVLxK1S8KtL1i1aXkDcgbkDeRabkU3ILuQNyBuRTcgbkDeSKm6BuIm4G4JukGdxUreiM1vBndFfj25AdLchiOlmRWXS3IsRu29RqmRUbpeI1S9VWl5BaXyQXeSBuRabkDdYFLyLTchV3IJuRTcgbkDeUgm8i03QqbkDpJFTdETcGa3oJugzuD8S3JKNOlmRUdLckrjLpbklUdLckrjOt23qNUyGYjdt8qLS8RaXqtXeSBvJCruRU3IG8kWrvJA3kgbkU3khTcim8kE3QTeQN0gm8gm6CboJW+QZreis7oPwLMqNOtmRUdLckrjLpbklUdLci4y6W5FGrckriN0yfn0RaZJBaZFF6KHQF6CnQVOgL1FOsgdZA6yB1kXDois9EDrIHQE6IJ0lBOkoM9ASuSUGekoPnrMqOmutmWVxl1syyuMuluRUdLci4y3bkVG7ci4jdMgNUyLgvRQ6AdJA6AdZFOsinSQOgp0A6yKdZFOsoHRBOkgnWUDoCdJQSuSUE6fn0Ga5JZGegPnLMss46utmWVxl1sytM662ZZVl0tySuMuluRUbtySuI3TJINUyS1iLTIC9AxOkinQDoB0GjoBTKLh0kDoB0kWp0A6MqdBE6ShidZFSuRBOqCdEE6SgnQHzNmWWcd9dbMsqxrtZklWNdbMstYy62ZZXGXS3KqN25ZVG6ZZEWmWVovWVReop1kU6yB1kDrIuHWRU6gvWRTrIJ1kDqKdZZE6yCdZQTrIp1QTrKCdZQTrKCdZQfK480s49G47WZpXHPXazNKsutmaVYdLM0tYzrrblkRumaWkapmKjVM0rUWmaQXrIp2kVO0gdpFKZpA7SKdpBOwq9pA7SKdpA7JSM9pFO0pROyCdpKHWUE6ygnVBOsoPk8eaWcenXezNK4xrtZmlcYdbM0qxrrZmlcZdLc0rWW7c0qjduWVRaZpEapllQ7SLh2kU6gnUU6yKdpA7SinaQTtKqdpFO0oHYodpQTtIJ2lA6ygdpQOsgnaUGesoPkceaWHr13x5pac9d7M0qxrrZmlcY11szSrLpbmlWW7c0qy6W5ZVFplkRaZpBeq1cTrKKvaQTsLh1FTrIYdhTtIJ2kaKZpA7SB2lKJ2lA7SUTqgdUqnYqHaUE7JROsg+Px55c817dd8eeWs1z3HezPK1y11szytZ11szyuaw6255Wst25pWo6W55WotM8rRaZ6f6VIveSqneSh3Srid5KHeSqd5KRO8lU70/wBKsO8lE7yVTvJSHaUqw7SlIneSh2lKHaSidkodpRInaSkXslV8Vjzy5vduO+PPLVctx3x55Wue47WZ5WsR2szytYdLc8rWW7c8rUbpnkrLVM8rRaZ5KHeSh3kq4neUqneSid5KuHeSh3kq4neSqd5QO8lU7yUO8lDvJQ7ylE7lU7ylQ7yUO0pQ7SlDtJR8Rjzy519DcejHnlquW472Z5Wueu1meVrGutmeVzWNdbc8lZbtzytZbpnlay1TPJRaZ5KHeSh3koneSqd5SqneSid5Kp3lKp3kq4neSh3kqneSkO8lDvJQ7ylDvJQ7ygtM0lQ7yUO0oHeQfDY88uea+luPRjzyua5bj0WZ5arnrrZnlcc9drM8jGutueVrLdueVrLdueSstUzyUWmeSoveSqneSid5Kp3lKJ3kqp3kqneUpE7yVTvJVTvJVO8lCmeSi95KHeUod5KFM8lF7ylDvJUh3KHaSj//2Q==" 
+                      blurDataURL="data:image/jpeg;base64,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"
                     />
                     <p className="text-white text-xs w-[60px] overflow-hidden whitespace-nowrap text-ellipsis">
                       {nft.name}
@@ -138,6 +140,14 @@ const Hero = async () => {
                 ))}
               </div>
             </div>
+            <Link
+              href={{
+                pathname: "/nftrankings",
+                query: { name: "nfts" },
+              }}
+            >
+              View All NFTs
+            </Link>
           </div>
         </div>
       </section>
