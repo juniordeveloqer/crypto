@@ -1,5 +1,6 @@
 import React from "react";
 import { getCombinedData } from "@/components/NftCollectiondata"; // Import the getNftData function
+import Image from "next/image"; // Import Next.js Image component
 
 // app/cryptopunks/page.tsx
 
@@ -7,32 +8,61 @@ export default async function CollectionsStatsPage() {
   const data = await getCombinedData(); // Hem koleksiyon hem de stats verilerini çekiyoruz
 
   return (
-    <div className="text-white">
-      <h1>Top 5 Ethereum Collections and Stats</h1>
-
-      {data.map((item: any, index: number) => (
-        <div key={index}>
-          <h2>{item.collection.name}</h2>
-          <p>Collection Name: {item.collection.collection}</p>
-          <p>Description: {item.collection.description}</p>
-          {item.collection.image_url && (
-            <img 
-              src={item.collection.image_url} 
-              alt={`${item.collection.name} image`} 
-              width={200} 
-              height={200}
-            />
-          )}
-          <p>Stats:</p>
-          <ul>
-            <li>Total Volume: {item.stats.total.volume}</li>
-            <li>Total Sales: {item.stats.total.sales}</li>
-            <li>Average Price: {item.stats.total.average_price}</li>
-            <li>Number of Owners: {item.stats.total.num_owners}</li>
-            <li>Market Cap: {item.stats.total.market_cap}</li>
-          </ul>
-        </div>
-      ))}
+    <div className="text-white   max-w-navbar mx-auto">
+      <div className="h-[400px] bg-black flex flex-col justify-center items-center text-center px-4">
+        <h1 className="text-4xl font-semibold mb-2">Top NFT Collection Prices</h1>
+        <p className="text-xl text-gray-400">
+          Explore all the top NFT collections by price floor, market cap, and total volume. We aggregate NFTs from various blockchains such as Ethereum, Polygon, Optimism, Arbitrum, Klaytn, and more.
+        </p>
+      </div>
+  
+      <table className="min-w-full table-auto bg-black text-white rounded-lg shadow-lg">
+        <thead>
+          <tr className=" text-gray-300">
+            <th className="px-4 py-2 text-right">#</th> {/* Sağa hizalı */}
+            <th className="px-4 py-2 text-left">NFT</th> {/* Sol tarafa hizalı */}
+            <th className="px-4 py-2 text-right">Floor Price</th> {/* Sağa hizalı */}
+            <th className="px-4 py-2 text-right">24h Change</th> {/* Sağa hizalı */}
+            <th className="px-4 py-2 text-right">24h Volume</th> {/* Sağa hizalı */}
+            <th className="px-4 py-2 text-right">Market Cap</th> {/* Sağa hizalı */}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item: any, index: number) => (
+            <tr key={index} className="text-center border-b border-gray-700 hover:bg-gray-800 transition-all">
+              <td className="px-4 py-2 text-right">{index + 1}</td> {/* Sağa hizalı */}
+              <td className="px-4 py-2 text-left flex items-center justify-start"> {/* Sol tarafa hizalı */}
+                <div className="flex items-center">
+                  <Image
+                    src={item.collection.image_url}
+                    alt={item.collection.name}
+                    width={40} // Square size for images
+                    height={40}
+                    className="rounded-lg"
+                  />
+                  <div className="ml-2">
+                    <span className="truncate">{item.collection.name}</span>
+                    <div className="text-sm text-gray-400">{item.collection.chain}</div> {/* Chain name below */}
+                  </div>
+                </div>
+              </td>
+              <td className="px-4 py-2 text-right">
+                {item.stats.total.floor_price === 0 ? "-" : item.stats.total.floor_price.toFixed(2)} {/* Eğer sıfırsa "-" */}
+                {item.collection.floor_price_symbol}
+              </td> {/* Sağa hizalı */}
+              <td className="px-4 py-2 text-right">
+                {item.stats.intervals?.find(interval => interval.interval === "one_day")?.volume_change !== undefined ? (
+                  <span className={item.stats.intervals.find(interval => interval.interval === "one_day")?.volume_change > 0 ? "text-green-500" : "text-red-500"}>
+                    {item.stats.intervals.find(interval => interval.interval === "one_day")?.volume_change.toFixed(2)}%
+                  </span>
+                ) : "-"}
+              </td> {/* Sağa hizalı */}
+              <td className="px-4 py-2 text-right">{item.stats.total.volume.toLocaleString()}</td> {/* Sağa hizalı */}
+              <td className="px-4 py-2 text-right">{item.stats.total.market_cap.toLocaleString()}</td> {/* Sağa hizalı */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

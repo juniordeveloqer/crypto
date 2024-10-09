@@ -3,7 +3,7 @@ import { getCryptoPrices } from "@/components/Coingeckoapi";
 import { fetchgeneralinfo, CoinInfo } from "@/components/CryptoGeneralInfo";
 import {
   fetchCryptoChange,
-  CryptoChange,
+  CryptoChanges,
 } from "@/components/Crypto24HourChange";
 import { fetchNews, NewsArticle } from "@/components/CryptoNews";
 import { fetchNftInfo, NftInfo } from "@/components/Nfts";
