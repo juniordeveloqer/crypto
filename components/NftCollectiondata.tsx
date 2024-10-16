@@ -17,7 +17,7 @@ export async function getCollectionsData() {
   }
 
   const data = await res.json();
-  return data.collections.slice(0, 20);  // İlk 5 koleksiyonu al
+  return data.collections.slice(0, 40);  // İlk 5 koleksiyonu al
 }
 
 // Stats verilerini dinamik "collection" parametresi ile almak için fonksiyon
@@ -31,15 +31,21 @@ export async function getStatsData(collectionName: string) {
   return res.json();
 }
 
-// Hem collection hem stats verisini birleştiren fonksiyon
 export async function getCombinedData() {
-  const collections = await getCollectionsData(); // Koleksiyonları çekiyoruz
-  
-  // Her koleksiyonun "collection" alanına göre stats verilerini çekiyoruz
+  const collections = await getCollectionsData(); // Fetch collections
+
+  // Fetch stats for each collection
   const statsPromises = collections.map(async (collection: any) => {
-    const stats = await getStatsData(collection.collection); // "slug" yerine "collection" alanını kullanıyoruz
-    return { collection, stats }; // Koleksiyon ve stats verilerini birleştiriyoruz
+    const stats = await getStatsData(collection.collection); // Use "collection" field
+    return { collection, stats }; // Combine collection and stats
   });
 
-  return Promise.all(statsPromises); // Tüm promiseleri döndürüyoruz
+  const combinedData = await Promise.all(statsPromises); // Wait for all stats to be fetched
+
+  // Sort by total volume (you may want to adjust this to suit your needs)
+  combinedData.sort((a, b) => {
+    return (b.stats.total.volume || 0) - (a.stats.total.volume || 0); // Descending order
+  });
+
+  return combinedData;
 }

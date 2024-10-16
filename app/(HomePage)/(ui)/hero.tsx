@@ -143,7 +143,6 @@ const Hero = async () => {
             <Link
               href={{
                 pathname: "/nftrankings",
-                query: { name: "nfts" },
               }}
             >
               View All NFTs

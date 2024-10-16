@@ -29,11 +29,10 @@
   padding-block: 1rem;
 
   animation: scroll var(--_animation-duration, 40s) linear infinite;
-  animation-play-state: running; 
-
+  animation-play-state: running;
 
   &:hover {
-    animation-play-state: paused; 
+    animation-play-state: paused;
   }
 }
 .scroller[data-direction="right"] {
@@ -79,14 +78,31 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-15px); /* Adjust this value for more or less movement */
+    transform: translateY(
+      -15px
+    ); /* Adjust this value for more or less movement */
   }
 }
 
 .animate-bounce {
   animation: bounce 5s infinite; /* Adjust duration as needed */
+}
+.nft-container {
+  overflow: hidden; /* Prevents overflow */
+  position: relative;
+  border: none; /* Ensure there's no border */
+}
+
+.nft-image {
+  transition: transform 0.3s ease;
+  border: none; /* Remove border */
+}
+
+.nft-image:hover {
+  transform: scale(1.2);
 }
