@@ -1,4 +1,4 @@
-"use client"; // Bu bileşeni istemci tarafında işaretler
+"use client"; // This marks the component as client-side
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -19,53 +19,75 @@ export default function NFTGrid({
   const [nfts, setNfts] = useState<NFT[]>(initialNfts);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [throttled, setThrottled] = useState(false);
 
-  // Slug geçerli değilse hata mesajı göster
-  if (!slug || slug.trim() === "") {
-    console.error("Geçersiz slug:", slug);
-    return <div>Slug geçerli değil.</div>;
-  }
+  const throttleFetch = async () => {
+    if (throttled) return;
 
-  // Eğer initialNfts boşsa, yükleme durumunu güncelle
+    setThrottled(true);
+    setLoading(true);
+
+    try {
+      const response = await fetch(`/api/nfts/${slug}`);
+      if (!response.ok) {
+        if (response.status === 429) {
+          const data = await response.json();
+          const waitTime = data.detail.includes("60 seconds") ? 60000 : 30000;
+          console.error(`Throttled. Waiting for ${waitTime / 1000} seconds.`);
+          setTimeout(throttleFetch, waitTime);
+          return;
+        }
+        throw new Error("Network error: " + response.statusText);
+      }
+
+      const data = await response.json();
+      setNfts(data);
+      setError(null);
+    } catch (err) {
+      setError("Error loading NFTs.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setTimeout(() => setThrottled(false), 1000);
+    }
+  };
+
   useEffect(() => {
     if (nfts.length === 0) {
-      setLoading(true);
-      setError("NFT'ler yükleniyor...");
+      throttleFetch();
     }
-  }, [nfts]);
+  }, [slug, nfts]);
 
-  if (loading) return <div className="text-gray-400">{error}</div>;
+  if (loading) return <div className="text-gray-400">Loading NFTs...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
-
-  if (!Array.isArray(nfts)) {
-    console.warn("Beklenmeyen veri formatı:", nfts);
-    return <div>Beklenmeyen veri formatı.</div>;
-  }
-
+  const filteredNfts = nfts.filter((nft) => nft.display_image_url);
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {nfts.map((nft: NFT) => (
-        <div
-          key={nft.identifier}
-          className="bg-gray-800 rounded-lg overflow-hidden shadow-lg"
-        >
-          <div className="relative overflow-hidden">
-            <Image
-              src={nft.display_image_url || "/placeholder.png"}
-              alt={nft.name || "Unnamed NFT"}
-              width={300}
-              height={300}
-              className="w-full h-full object-cover"
-              style={{ width: "auto", height: "auto" }} // Aspect ratio koruma
-            />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      {filteredNfts.length > 0 ? (
+        filteredNfts.map((nft: NFT) => (
+          <div
+            key={nft.identifier}
+            className="bg-gray-800 rounded-lg shadow-lg"
+          >
+            <div className="relative overflow-hidden">
+              <Image
+                src={nft.display_image_url || "/placeholder.png"}
+                alt={nft.name || "Unnamed NFT"}
+                width={300}
+                height={300}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-4">
+              <h4 className="text-lg font-medium text-white truncate">
+               #{nft.identifier || "Unnamed NFT"}
+              </h4>
+            </div>
           </div>
-          <div className="p-4">
-            <h4 className="text-lg font-medium text-white">
-              {nft.name || "Unnamed NFT"}
-            </h4>
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <div className="text-gray-400">No NFTs available with images.</div>
+      )}
     </div>
   );
 }

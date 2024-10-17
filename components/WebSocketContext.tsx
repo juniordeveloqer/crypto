@@ -1,5 +1,5 @@
-"use client"
-import React, { createContext, useState, useEffect, useContext } from 'react';
+"use client";
+import React, { createContext, useState, useEffect, useContext } from "react";
 
 // WebSocketContextType tipini oluşturuyoruz
 interface WebSocketContextType {
@@ -9,7 +9,7 @@ interface WebSocketContextType {
 
 // WebSocketProviderProps tipini oluşturuyoruz, children özelliğini dahil ediyoruz
 interface WebSocketProviderProps {
-  children: React.ReactNode;  // children özelliği burada tanımlandı
+  children: React.ReactNode; // children özelliği burada tanımlandı
 }
 
 const WebSocketContext = createContext<WebSocketContextType | null>(null);
@@ -25,13 +25,20 @@ export const useWebSocket = () => {
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
   const [prices, setPrices] = useState<{ [key: string]: string | null }>({});
   const [ws, setWs] = useState<WebSocket | null>(null);
-
+// HANDLING API KEYS I WILL CHANGE THE ALL API KEYS WITH NEW ONES
   useEffect(() => {
-    // WebSocket bağlantısını bir kez aç
-    const socket = new WebSocket("wss://streamer.cryptocompare.com/v2?api_key=1162f895434ff38066365c8eaecbe9415a1e8d25569f1f7ca848e8529d83a8a1");
+    const apiKey = process.env.NEXT_PUBLIC_CRYPTOCOMPARE;
+    if (!apiKey) {
+      console.error("API Key is missing!");
+      return;
+    }
+
+    const socket = new WebSocket(`wss://streamer.cryptocompare.com/v2?api_key=${apiKey}`);
 
     socket.onopen = () => {
-      const coinsToSubscribe = ["BTC", "ETH", "SOL"].map((coin) => `5~CCCAGG~${coin}~USD`);
+      const coinsToSubscribe = ["BTC", "ETH", "SOL"].map(
+        (coin) => `5~CCCAGG~${coin}~USD`
+      );
       socket.send(JSON.stringify({ action: "SubAdd", subs: coinsToSubscribe }));
     };
 

@@ -1,6 +1,6 @@
 
 const COINS_INFO_URL = 'https://min-api.cryptocompare.com/data/coin/generalinfo';
-const API_KEY = '1162f895434ff38066365c8eaecbe9415a1e8d25569f1f7ca848e8529d83a8a1';
+const API_KEY = process.env.CRYPTOCOMPARE;
 
 export interface CoinInfo {
   Id: string;

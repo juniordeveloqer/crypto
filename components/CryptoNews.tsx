@@ -11,27 +11,32 @@ export interface NewsArticle {
   sourceName: string;
   sourceImg: string;
 }
-
 const NEWS_URL =
   'https://min-api.cryptocompare.com/data/v2/news/?feeds=cryptocompare,cointelegraph,coindesk&extraParams=YourSite';
-const API_KEY =
-  '1162f895434ff38066365c8eaecbe9415a1e8d25569f1f7ca848e8529d83a8a1';
+const API_KEY = process.env.CRYPTOCOMPARE;
 
 const getNews = unstable_cache(
   async (): Promise<NewsArticle[]> => {
+    const headers: Record<string, string> = {
+      accept: 'application/json',
+      'Cache-Control': 'no-store',
+    };
+
+    // API_KEY tanımlıysa headers içine ekliyoruz
+    if (API_KEY) {
+      headers['api_key'] = API_KEY;
+    }
+
     const options = {
       method: 'GET',
-      headers: {
-        accept: 'application/json',
-        'Cache-Control': 'no-store',
-        'api_key': API_KEY,
-      },
+      headers,
     };
 
     const response = await fetch(NEWS_URL, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     const data = await response.json();
 
     // Ensure the data structure is valid
@@ -55,5 +60,5 @@ const getNews = unstable_cache(
 );
 
 export const fetchNews = async (): Promise<NewsArticle[]> => {
-  return await getNews(); 
+  return await getNews();
 };
