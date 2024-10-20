@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "aws-sdk": "^2.1675.0",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",

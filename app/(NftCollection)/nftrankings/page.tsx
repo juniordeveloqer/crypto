@@ -35,7 +35,7 @@ export default async function CollectionsStatsPage() {
           {data.map((item: any, index: number) => (
             <tr
               key={index}
-              className="text-center border-b border-gray-700 hover:bg-gray-800 transition-all"
+              className="text-center  border-gray-700 hover:bg-gray-800 transition-all"
             >
               <td className="px-4 py-2 text-left  items-center">
                 {/* Yıldız ve sayı burada, resmin sol tarafına hizalayacağız */}
@@ -46,7 +46,7 @@ export default async function CollectionsStatsPage() {
                   {/* Sayıyı sola hizalayalım */}
                 </div>
               </td>
-              <td className="px-4 py-2 text-left flex items-center justify-start">
+              <td className="px-4 py-4 text-left flex items-center justify-start">
                 <Link href={`/nftrankings/${item.collection.collection  }`}>
                   {/* Yıldız ve sayıyı, resmin solunda hizalayacağız */}
                   <div className="flex items-center">
@@ -56,7 +56,7 @@ export default async function CollectionsStatsPage() {
                       alt={item.collection.name}
                       width={60} // Resim boyutunu 60px yapıyoruz
                       height={60}
-                      className="rounded-lg"
+                      className="rounded-lg "
                     />
                     <div className="ml-2">
                       <span className="truncate text-[16px] font-semibold">

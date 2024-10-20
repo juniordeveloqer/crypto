@@ -106,3 +106,23 @@ export async function getBestOfferForNFT(
 
   return data; // Return the best offer
 }
+
+// Function to fetch collection items (basic info)
+export async function getDescription(collectionName: string) {
+  const res = await fetch(
+    `https://api.opensea.io/api/v2/collections/${collectionName}`,
+    {
+      ...fetchOptions, // Fetch ayarlarını buradan alıyor
+      next: { revalidate: 60 }, // Önbelleğe alma süresi 60 saniye
+    },
+  );
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    console.error("API Error Response:", errorData);
+    throw new Error("Failed to fetch collection info");
+  }
+
+  const data = await res.json();
+  return data.description; // Return collection-level information
+}
