@@ -45,7 +45,7 @@ const WhyCold = () => {
               Simplicity
             </h1>
             <p className="text-center text-[20px]">
-              Kraken makes it easy to buy <br />
+              Cold makes it easy to buy <br />
               crypto
             </p>
           </div>

@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className=" bg-BackgroundPrimary h-16  ">
+      <div className=" bg-[#0d131d] h-16  ">
         <div className="flex justify-between items-center    w-4/5  h-full mx-auto ">
           {/* //logo */}
           <Link href="/">

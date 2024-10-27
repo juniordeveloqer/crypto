@@ -1,4 +1,5 @@
-"use client"; // This marks the component as client-side
+// components/NFTGrid.tsx
+"use client"; // İstemci bileşeni
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -12,10 +13,14 @@ interface NFT {
 export default function NFTGrid({
   slug,
   initialNfts,
+  gridCount,
 }: {
   slug: string;
   initialNfts: NFT[];
+  gridCount: number; // gridCount propunu ekle
 }) {
+  console.log("Current grid count:", gridCount);
+
   const [nfts, setNfts] = useState<NFT[]>(initialNfts);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,9 +65,17 @@ export default function NFTGrid({
 
   if (loading) return <div className="text-gray-400">Loading NFTs...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
+
   const filteredNfts = nfts.filter((nft) => nft.display_image_url);
+  const gridClasses = `grid gap-6 ${
+    gridCount === 1 ? "grid-cols-1" : gridCount === 4 ? "grid-cols-4" : "grid-cols-9"
+  }`;
+
+  // Debug the rendered classes
+  console.log("Grid classes:", gridClasses);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+    <div className={gridClasses}>
       {filteredNfts.length > 0 ? (
         filteredNfts.map((nft: NFT) => (
           <div
@@ -71,22 +84,20 @@ export default function NFTGrid({
           >
             <div className="relative overflow-hidden">
               <Image
-                src={nft.display_image_url || "/placeholder.png"}
-                alt={nft.name || "Unnamed NFT"}
+                src={nft.display_image_url || ""}
+                alt={nft.name || "NFT Image"}
                 width={300}
                 height={300}
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-4">
-              <h4 className="text-lg font-medium text-white truncate">
-               #{nft.identifier || "Unnamed NFT"}
-              </h4>
+            <div className="p-2">
+              <h3 className="text-lg font-semibold">{nft.name}</h3>
             </div>
           </div>
         ))
       ) : (
-        <div className="text-gray-400">No NFTs available with images.</div>
+        <div className="text-gray-400">No NFTs found.</div>
       )}
     </div>
   );

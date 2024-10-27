@@ -27,8 +27,8 @@ const Hero = async () => {
     ]);
   return (
     <WebSocketProvider>
-      <section className="flex justify-between max-w-section h-lvh mx-auto text-white">
-        <div className="w-full flex justify-between">
+      <section className="flex justify-between h-lvh  text-white bg-black">
+        <div className="w-full flex justify-between max-w-section mx-auto ">
           <div className="pt-[90px]">
             <p className="text-[64px]">Earn with Crypto</p>
             <p className=" min-h-24">
@@ -50,7 +50,7 @@ const Hero = async () => {
             </div>
           </div>
 
-          <div className="w-[542px] h-[211px] rounded-[20px] bg-[#1A1E24] mt-[75px]">
+          <div className="w-[542px] h-[211px] rounded-[20px] bg-[#0d131d] mt-[75px]">
             <div className="flex justify-between mx-6 my-5">
               <p className="text-[16px]">Trending</p>
               <p className="text-[15px]">view more</p>
@@ -97,7 +97,7 @@ const Hero = async () => {
             </div>
 
             {/* News Section */}
-            <div className="text-sm w-[542px] h-[181px] rounded-[20px] bg-[#1A1E24] mt-24">
+            <div className="text-sm w-[542px] h-[181px] rounded-[20px] bg-[#0d131d] mt-24">
               <div className="pt-4 pl-6">
                 <p className="mb-4 text-[16px] font-bold">News</p>
                 {newsArticles.map((article, index) => (
@@ -110,9 +110,9 @@ const Hero = async () => {
             </div>
 
             {/* NFT Section */}
-            <div className="text-sm w-[542px] h-[130px] rounded-[20px] bg-[#1A1E24] mt-8 pt-3 overflow-x-auto">
-              <p>NFT's</p>
-              <div className="flex space-x-4 items-center pl-9">
+            <div className="text-sm w-[542px] h-[170px] rounded-[20px] bg-[#0d131d] mt-8 pt-3 overflow-x-auto">
+              <p className="pl-9 pb-2">NFT's</p>
+              <div className="flex space-x-4 items-center pl-9 ">
                 {nftInfos.map((nft, index) => (
                   <div key={index} className="flex-shrink-0 text-center">
                     <link
@@ -139,14 +139,16 @@ const Hero = async () => {
                   </div>
                 ))}
               </div>
+              <div className="mt-3 pl-9">
+                <Link
+                  href={{
+                    pathname: "/nftrankings",
+                  }}
+                >
+                  View All NFTs
+                </Link>
+              </div>
             </div>
-            <Link
-              href={{
-                pathname: "/nftrankings",
-              }}
-            >
-              View All NFTs
-            </Link>
           </div>
         </div>
       </section>

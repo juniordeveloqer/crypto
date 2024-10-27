@@ -1,11 +1,14 @@
 // app/[slug]/page.tsx
 import Image from "next/image";
-import { getCollectionItems, getCollectionStats, getNFTs, getDescription } from "@/components/NFtCollectionSolo";
-import NFTGrid from "@/components/NFTGrid";
+import {
+  getCollectionItems,
+  getCollectionStats,
+  getNFTs,
+  getDescription,
+} from "@/components/NFtCollectionSolo";
 import ExpandableText from "@/hooks/useLineClamp";
-import SearchBar from "@/components/SearchBar"; 
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
-
+import NFTGridWrapper from "@/components/NftComponents/NFTGridWrapper";
 
 export default async function CollectionPage({
   params,
@@ -23,37 +26,52 @@ export default async function CollectionPage({
     const description = await getDescription(slug); // Fetch description here
 
     if (!collection || !nfts || nfts.length === 0) {
-      return <div className="text-red-500">No data found for collection: {slug}</div>;
+      return (
+        <div className="text-red-500">No data found for collection: {slug}</div>
+      );
     }
 
     // Use a default value for search query to avoid undefined error
     const searchQuery = searchParams.search || ""; // Fallback to empty string if undefined
 
-    // Filter NFTs based on search query for both name and traits
+    // NFT'leri filtrele
     const filteredNfts = searchQuery
       ? nfts.filter((nft) => {
           const lowerQuery = searchQuery.toLowerCase();
           return (
             nft.name.toLowerCase().includes(lowerQuery) ||
-            (nft.traits && nft.traits.some((trait) =>
-              trait.value.toLowerCase().includes(lowerQuery)
-            ))
+            (nft.traits &&
+              nft.traits.some((trait) =>
+                trait.value.toLowerCase().includes(lowerQuery),
+              ))
           );
         })
       : nfts;
 
     return (
       <div className="relative min-h-screen bg-black text-white">
-        {collection.banner_image_url && (
-          <div className="relative h-72 w-full mb-8">
-            <Image
-              src={collection.banner_image_url.replace(/w=\d+/, "w=1920")}
-              alt="Banner Image"
-              fill
-              className="object-cover opacity-80"
-              priority
-              sizes="100vw"
-            />
+        {(collection.banner_image_url || collection.image_url) && (
+          <div className="relative h-[400px] w-full mb-8">
+            {collection.banner_image_url &&
+            (collection.banner_image_url.endsWith(".mp4") ||
+              collection.banner_image_url.endsWith(".webm")) ? (
+              <video
+                src={collection.banner_image_url}
+                autoPlay
+                loop
+                muted
+                className="object-cover w-full h-full opacity-80"
+              />
+            ) : (
+              <Image
+                src={collection.banner_image_url.replace(/w=\d+/, "w=1920")}
+                alt="Banner Image"
+                fill
+                className="object-cover opacity-80"
+                priority
+                sizes="100vw"
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
 
             <div className="absolute bottom-0 left-0 w-full flex justify-center items-center p-6 z-10">
@@ -82,21 +100,27 @@ export default async function CollectionPage({
                 <div className="flex gap-4 text-center text-gray-300">
                   <div>
                     <p className="text-lg">
-                      {stats?.total?.volume ? stats.total.volume.toFixed(2) : "-"}{" "}
+                      {stats?.total?.volume
+                        ? stats.total.volume.toFixed(2)
+                        : "-"}{" "}
                       {stats?.total?.floor_price_symbol || "ETH"}
                     </p>
                     <p className="text-sm">Total Volume</p>
                   </div>
                   <div>
                     <p className="text-lg">
-                      {stats?.total?.floor_price ? stats.total.floor_price.toFixed(2) : "-"}{" "}
+                      {stats?.total?.floor_price
+                        ? stats.total.floor_price.toFixed(2)
+                        : "-"}{" "}
                       {stats?.total?.floor_price_symbol || "ETH"}
                     </p>
                     <p className="text-sm">Floor Price</p>
                   </div>
                   <div>
                     <p className="text-lg">
-                      {stats?.total?.average_price ? stats.total.average_price.toFixed(4) : "-"}{" "}
+                      {stats?.total?.average_price
+                        ? stats.total.average_price.toFixed(4)
+                        : "-"}{" "}
                       ETH
                     </p>
                     <p className="text-sm">Average Price</p>
@@ -125,30 +149,25 @@ export default async function CollectionPage({
               defaultValue={searchQuery} // Set the initial value from the URL parameter
               className="p-2 rounded bg-gray-800 text-gray-300"
             />
-            <button type="submit" className="ml-2 p-2 rounded bg-blue-600 text-white">
+            <button
+              type="submit"
+              className="ml-2 p-2 rounded bg-blue-600 text-white"
+            >
               Search
             </button>
           </form>
         </div>
 
         {/* Render ExpandableText with the fetched description */}
-        <div className="max-w-screen-xl mx-auto ">
-          <div className="mt-8 flex "> {/* Centering the description */}
-            <ExpandableText description={description} /> {/* Pass description as a prop */}
+        <div className="max-w-screen-xl mx-auto">
+          <div className="mt-8 flex ">
+            <ExpandableText description={description} />
           </div>
         </div>
 
-        <div className="max-w-screen-xl mx-auto ">
-          <div className="mt-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">Items</h2>
-              <select className="bg-gray-800 p-2 rounded text-gray-300">
-                <option value="price-low-high">Price low to high</option>
-                <option value="price-high-low">Price high to low</option>
-              </select>
-            </div>
-            <NFTGrid slug={slug} initialNfts={filteredNfts} />
-          </div>
+        {/* Use NFTGridWrapper for grid display */}
+        <div className="max-w-screen-xl mx-auto">
+          <NFTGridWrapper slug={slug} initialNfts={filteredNfts}  />
         </div>
       </div>
     );

@@ -17,7 +17,7 @@ export async function getCollectionsData() {
   }
 
   const data = await res.json();
-  return data.collections.slice(0, 40);  // İlk 5 koleksiyonu al
+  return data.collections.slice(0, 100);  // İlk 5 koleksiyonu al
 }
 
 // Stats verilerini dinamik "collection" parametresi ile almak için fonksiyon
