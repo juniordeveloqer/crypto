@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const gridOptions = [
   { id: 4, src: "/icons/4.svg", alt: "Four Grid" },
-  { id: 1, src: "/icons/tekli.svg", alt: "One Grid" },
+  { id: 5, src: "/icons/tekli.svg", alt: "One Grid" },
   { id: 9, src: "/icons/nine.svg", alt: "Nine Grid" },
 ];
 

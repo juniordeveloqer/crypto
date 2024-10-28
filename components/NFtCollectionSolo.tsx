@@ -103,7 +103,7 @@ export async function getBestOfferForNFT(
   }
 
   const data = await res.json();
-
+  
   return data; // Return the best offer
 }
 

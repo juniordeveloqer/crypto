@@ -1,20 +1,21 @@
-"use client"; // İstemci bileşeni olduğunu belirtir
+"use client"; // Specify this as a client component
 
 import { useState } from "react";
 import NFTGrid from "@/components/NFTGrid";
 import GridIcons from "@/components/NftComponents/GridIcons";
 
-export default function NFTGridWrapper({ slug, initialNfts }) {
-  const [gridCount, setGridCount] = useState(12); // Varsayılan grid sayısı
+interface NFTGridWrapperProps {
+  slug: string;
+  initialNfts: any[]; // Adjust according to your NFT type
+  offers: Record<string, any>; // Add this line to include offers in the prop types
+}
 
-  const handleGridChange = (count) => {
+export default function NFTGridWrapper({ slug, initialNfts, offers }: NFTGridWrapperProps) {
+  const [gridCount, setGridCount] = useState(5); // Default grid count
+
+  const handleGridChange = (count: number) => {
     console.log("Changing grid count to:", count); // Log the grid count being set
     setGridCount(count); // Update the selected grid count
-
-    // Log the updated state
-    setTimeout(() => {
-      console.log("Updated grid count after state change:", gridCount);
-    }, 0);
   };
 
   console.log("Rendering NFTGrid with gridCount:", gridCount); // Log before rendering
@@ -22,15 +23,14 @@ export default function NFTGridWrapper({ slug, initialNfts }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <GridIcons onGridChange={handleGridChange} /> {/* Grid ikon bileşeni */}
+        <GridIcons onGridChange={handleGridChange} /> {/* Grid icon component */}
         <h2 className="text-2xl font-semibold">Items</h2>
         <select className="bg-gray-800 p-2 rounded text-gray-300">
           <option value="price-low-high">Price low to high</option>
           <option value="price-high-low">Price high to low</option>
         </select>
       </div>
-      <NFTGrid slug={slug} initialNfts={initialNfts} gridCount={gridCount} />
-    
+      <NFTGrid slug={slug} initialNfts={initialNfts} gridCount={gridCount} offers={offers} />
     </div>
   );
 }

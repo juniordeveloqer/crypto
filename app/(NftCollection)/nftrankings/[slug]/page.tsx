@@ -5,6 +5,7 @@ import {
   getCollectionStats,
   getNFTs,
   getDescription,
+  getBestOfferForNFT,
 } from "@/components/NFtCollectionSolo";
 import ExpandableText from "@/hooks/useLineClamp";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
@@ -33,7 +34,15 @@ export default async function CollectionPage({
 
     // Use a default value for search query to avoid undefined error
     const searchQuery = searchParams.search || ""; // Fallback to empty string if undefined
-
+    const offers = await Promise.all(
+      nfts.map(async (nft) => ({
+        identifier: nft.identifier,
+        offer: await getBestOfferForNFT(slug, nft.identifier),
+      }))
+    );
+    const offersMap = Object.fromEntries(
+      offers.map(({ identifier, offer }) => [identifier, offer])
+    );
     // NFT'leri filtrele
     const filteredNfts = searchQuery
       ? nfts.filter((nft) => {
@@ -159,15 +168,15 @@ export default async function CollectionPage({
         </div>
 
         {/* Render ExpandableText with the fetched description */}
-        <div className="max-w-screen-xl mx-auto">
+        <div className="max-w-screen-xl mx-auto mb-8">
           <div className="mt-8 flex ">
             <ExpandableText description={description} />
           </div>
         </div>
 
         {/* Use NFTGridWrapper for grid display */}
-        <div className="max-w-screen-xl mx-auto">
-          <NFTGridWrapper slug={slug} initialNfts={filteredNfts}  />
+        <div className="max-w-screen-xl mx-auto ">
+          <NFTGridWrapper slug={slug} initialNfts={filteredNfts}  offers={offersMap} />
         </div>
       </div>
     );

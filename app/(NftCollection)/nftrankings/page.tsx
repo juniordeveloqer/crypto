@@ -56,7 +56,7 @@ export default async function CollectionsStatsPage() {
                       alt={item.collection.name}
                       width={60} // Resim boyutunu 60px yapıyoruz
                       height={60}
-                      className="rounded-lg "
+                      className="rounded-lg object-cover h-[60px] w-[60px] border border-gray-800"
                     />
                     <div className="ml-2">
                       <span className="truncate text-[16px] font-semibold">
