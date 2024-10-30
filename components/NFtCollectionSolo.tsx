@@ -84,28 +84,38 @@ export async function getCollectionItems(collectionName: string) {
 }
 
 // Function to fetch the best offer for a specific NFT
+// Function to fetch the best offer for a specific NFT
 export async function getBestOfferForNFT(
   collectionSlug: string,
   identifier: string,
-) {
+  retryDelay: number = 60000 // 60 seconds default delay
+): Promise<any> {
   const res = await fetch(
     `https://api.opensea.io/api/v2/offers/collection/${collectionSlug}/nfts/${identifier}/best`,
     {
-      ...fetchOptions, // Fetch ayarlarını buradan alıyor
-      next: { revalidate: 60 }, // Önbelleğe alma süresi 60 saniye
+      ...fetchOptions,
+      next: { revalidate: 60 },
     },
   );
 
   if (!res.ok) {
     const errorData = await res.json();
     console.error(`Error fetching best offer for ${identifier}:`, errorData);
+    
+    // Check for throttling error
+    if (errorData.detail && errorData.detail.includes("Request was throttled")) {
+      console.log(`Throttled for ${identifier}, retrying after ${retryDelay / 1000} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, retryDelay)); // wait before retrying
+      return getBestOfferForNFT(collectionSlug, identifier, retryDelay); // retry the request
+    }
+
     throw new Error(`Failed to fetch best offer for NFT ${identifier}`);
   }
 
   const data = await res.json();
-  
   return data; // Return the best offer
 }
+
 
 // Function to fetch collection items (basic info)
 export async function getDescription(collectionName: string) {
