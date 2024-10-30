@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Image from "next/image";
 
 interface NFT {
@@ -8,7 +7,7 @@ interface NFT {
 }
 
 interface Offer {
-  price?: { // Price is optional
+  price?: {
     currency: string;
     decimals: number;
     value: string;
@@ -26,9 +25,7 @@ export default function NFTGrid({
   offers: Record<string, Offer>;
   gridCount: number;
 }) {
-  const [nfts, setNfts] = useState<NFT[]>(initialNfts);
-
-  const filteredNfts = nfts.filter((nft) => nft.display_image_url);
+  const filteredNfts = initialNfts.filter((nft) => nft.display_image_url);
   const gridClasses = `grid gap-6 ${
     gridCount === 5 ? "grid-cols-5" : gridCount === 4 ? "grid-cols-4" : "grid-cols-9"
   }`;
@@ -38,6 +35,10 @@ export default function NFTGrid({
       {filteredNfts.length > 0 ? (
         filteredNfts.map((nft: NFT) => {
           const offer = offers[nft.identifier];
+          const ethPrice =
+            offer && offer.price && offer.price.value
+              ? parseFloat(offer.price.value) / 1e18
+              : null;
 
           return (
             <div key={nft.identifier} className="bg-gray-800 rounded-lg shadow-lg">
@@ -54,13 +55,11 @@ export default function NFTGrid({
               {gridCount !== 4 && (
                 <div className="p-2">
                   <h3 className="text-sm">{nft.name || nft.identifier}</h3>
-                  
-                  {/* Only render the price paragraph if offer and offer.price are valid */}
-                  {offer?.price?.value ? ( // Optional chaining to check if price value exists
+                  {ethPrice !== null && (
                     <p className="text-xs text-gray-400">
-                      Last Sale: {parseFloat(offer.price.value) / 1e18} ETH {/* Convert wei to ETH */}
+                      Last Sale: {ethPrice} ETH
                     </p>
-                  ) : null} {/* Don't render anything if price is not valid */}
+                  )}
                 </div>
               )}
             </div>

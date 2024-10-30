@@ -1,8 +1,13 @@
-"use client"; // Specify this as a client component
-
-import { useState, useEffect } from "react";
+"use client";
+import { useState } from "react";
 import NFTGrid from "@/components/NFTGrid";
 import GridIcons from "@/components/NftComponents/GridIcons";
+
+interface NFTGridWrapperProps {
+  slug: string;
+  initialNfts: NFT[];
+  offers: Record<string, Offer>;
+}
 
 interface NFT {
   identifier: string;
@@ -11,61 +16,58 @@ interface NFT {
 }
 
 interface Offer {
-  price?: { // Price is optional
+  price?: {
     currency: string;
     decimals: number;
     value: string;
   };
 }
 
-interface NFTGridWrapperProps {
-  slug: string;
-  initialNfts: NFT[]; // Adjust according to your NFT type
-  offers: Record<string, Offer>; // Add this line to include offers in the prop types
-}
-
-export default function NFTGridWrapper({ slug, initialNfts, offers }: NFTGridWrapperProps) {
+export default function NFTGridWrapper({
+  slug,
+  initialNfts,
+  offers,
+}: NFTGridWrapperProps) {
   const [gridCount, setGridCount] = useState(5); // Default grid count
-  const [sortOption, setSortOption] = useState("price-low-high"); // Default sort option
-  const [sortedNfts, setSortedNfts] = useState<NFT[]>(initialNfts); // New state for sorted NFTs
+  const [sortedNfts, setSortedNfts] = useState<NFT[]>(initialNfts);
 
   const handleGridChange = (count: number) => {
-    console.log("Changing grid count to:", count);
-    setGridCount(count);
+    setGridCount(count); // Update the selected grid count
   };
 
-  useEffect(() => {
-    const sorted = [...initialNfts];
+  const getPriceValue = (offer?: Offer): number => {
+    // Check if the offer and its price are defined, then parse value
+    return offer?.price?.value ? parseFloat(offer.price.value) / 1e18 : 0;
+  };
 
-    // Sort based on the selected option
-    if (sortOption === "price-low-high") {
-      sorted.sort((a, b) => {
-        const priceA = parseFloat(offers[a.identifier]?.price?.value || "0") || 0;
-        const priceB = parseFloat(offers[b.identifier]?.price?.value || "0") || 0;
-        return priceA - priceB;
-      });
-    } else if (sortOption === "price-high-low") {
-      sorted.sort((a, b) => {
-        const priceA = parseFloat(offers[a.identifier]?.price?.value || "0") || 0;
-        const priceB = parseFloat(offers[b.identifier]?.price?.value || "0") || 0;
-        return priceB - priceA;
-      });
-    }
+  const sortNFTs = (nfts: NFT[], offers: Record<string, Offer>, order: string) => {
+    return [...nfts].sort((a, b) => {
+      const aPrice = getPriceValue(offers[a.identifier]);
+      const bPrice = getPriceValue(offers[b.identifier]);
 
+      if (order === "price-low-high") {
+        return aPrice - bPrice;
+      } else if (order === "price-high-low") {
+        return bPrice - aPrice;
+      }
+      return 0;
+    });
+  };
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const order = event.target.value;
+    const sorted = sortNFTs(initialNfts, offers, order);
     setSortedNfts(sorted);
-  }, [initialNfts, sortOption, offers]);
-
-  console.log("Rendering NFTGrid with gridCount:", gridCount);
+  };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <GridIcons onGridChange={handleGridChange} />
+        <GridIcons onGridChange={handleGridChange} /> {/* Grid icon component */}
         <h2 className="text-2xl font-semibold">Items</h2>
         <select
+          onChange={handleSortChange}
           className="bg-gray-800 p-2 rounded text-gray-300"
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
         >
           <option value="price-low-high">Price low to high</option>
           <option value="price-high-low">Price high to low</option>
