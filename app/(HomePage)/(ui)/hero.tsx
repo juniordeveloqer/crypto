@@ -12,6 +12,7 @@ import CryptoPriceUpdater from "@/components/CryptoPrices";
 import { WebSocketProvider } from "@/components/WebSocketContext";
 import Image from "next/image";
 import Link from "next/link";
+import { fetchBitcoinPosts } from "@/components/GetEndPoints/fetchRedditPosts";
 
 const Hero = async () => {
   const coinSymbols = ["BTC", "ETH", "SOL"];
@@ -29,7 +30,7 @@ const Hero = async () => {
     <WebSocketProvider>
       <section className="flex justify-between h-lvh  text-white bg-black">
         <div className="w-full flex justify-between max-w-section mx-auto ">
-          <div className="pt-[90px]">
+          <div className="pt-[90px] w-full">
             <p className="text-[64px]">Earn with Crypto</p>
             <p className=" min-h-24">
               <TypedAnimation />

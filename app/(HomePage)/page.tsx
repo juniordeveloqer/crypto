@@ -1,5 +1,6 @@
 import HeroSection from "./(ui)/hero";
 import CarouselSection from "./(ui)/carouselsection";
+import EngagementSection from "./(ui)/EngagementSection";
 import WhyCold from "./(ui)/whycold";
 import DiscoverNfts from "./(ui)/discovernfts";
 import type { Metadata } from "next";
@@ -13,6 +14,7 @@ const HomePage = ({ children }: { children: React.ReactNode }) => {
     <section>
       <HeroSection />
       <CarouselSection />
+      <EngagementSection/>
       <WhyCold />
       <DiscoverNfts />
     </section>
