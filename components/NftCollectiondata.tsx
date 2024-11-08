@@ -1,29 +1,35 @@
-// lib/getData.ts
+import { unstable_cache } from "next/cache";
 
 const options = {
-  method: 'GET',
-  headers: { 
-    accept: 'application/json', 
-'x-api-key': process.env.OPENSEA_API_KEY || '' 
-  }
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    "x-api-key": process.env.OPENSEA_API_KEY || "",
+  },
 };
 
-// Koleksiyonları almak için fonksiyon
-export async function getCollectionsData() {
-  const res = await fetch('https://api.opensea.io/api/v2/collections?chain=ethereum&order_by=market_cap', options);
-  
+// Fetch collections with offset and limit for pagination
+export async function getCollectionsData(offset: number, limit: number) {
+  const res = await fetch(
+    `https://api.opensea.io/api/v2/collections?chain=ethereum&order_by=market_cap&offset=${offset}&limit=${limit}`,
+    options,
+  );
+
   if (!res.ok) {
-    throw new Error('Koleksiyon verisi çekilemedi');
+    throw new Error("Koleksiyon verisi çekilemedi");
   }
 
   const data = await res.json();
-  return data.collections.slice(0, 100);  // İlk 5 koleksiyonu al
+  return data.collections;
 }
 
-// Stats verilerini dinamik "collection" parametresi ile almak için fonksiyon
+// Fetch stats for each specific collection
 export async function getStatsData(collectionName: string) {
-  const res = await fetch(`https://api.opensea.io/api/v2/collections/${collectionName}/stats`, options);
-  
+  const res = await fetch(
+    `https://api.opensea.io/api/v2/collections/${collectionName}/stats`,
+    options,
+  );
+
   if (!res.ok) {
     throw new Error(`${collectionName} için stats verisi çekilemedi`);
   }
@@ -31,21 +37,41 @@ export async function getStatsData(collectionName: string) {
   return res.json();
 }
 
-export async function getCombinedData() {
-  const collections = await getCollectionsData(); // Fetch collections
+// Cached combined data fetching
+export const getCombinedData = async (offset: number, limit: number) => {
+  const cachedFetch = unstable_cache(
+    async (offset, limit) => {
+      try {
+        const collections = await getCollectionsData(offset, limit);
 
-  // Fetch stats for each collection
-  const statsPromises = collections.map(async (collection: any) => {
-    const stats = await getStatsData(collection.collection); // Use "collection" field
-    return { collection, stats }; // Combine collection and stats
-  });
+        const statsPromises = collections.map(async (collection: any) => {
+          try {
+            const stats = await getStatsData(collection.collection);
+            return { collection, stats };
+          } catch (error) {
+            console.error(`Failed to fetch stats for ${collection.collection}:`, error);
+            // Fallback to returning collection with null stats
+            return { collection, stats: null };
+          }
+        });
 
-  const combinedData = await Promise.all(statsPromises); // Wait for all stats to be fetched
+        const combinedData = await Promise.all(statsPromises);
 
-  // Sort by total volume (you may want to adjust this to suit your needs)
-  combinedData.sort((a, b) => {
-    return (b.stats.total.volume || 0) - (a.stats.total.volume || 0); // Descending order
-  });
+        // Ensure there's data to sort, else throw an error
+        if (!combinedData || combinedData.length === 0) {
+          throw new Error("No combined data available after fetching.");
+        }
 
-  return combinedData;
-}
+        combinedData.sort((a, b) => (b.stats?.total?.volume || 0) - (a.stats?.total?.volume || 0));
+        return combinedData;
+      } catch (error) {
+        console.error("Error during data combination:", error);
+        throw new Error("Error combining data"); // Triggers 500 response
+      }
+    },
+    [`combined-data-${offset}-${limit}`],
+    { revalidate: 3600 },
+  );
+
+  return cachedFetch(offset, limit);
+};

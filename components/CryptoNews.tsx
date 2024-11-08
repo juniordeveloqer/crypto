@@ -1,5 +1,5 @@
 // lib/news.ts
-import { unstable_cache } from 'next/cache';
+import { unstable_cache } from "next/cache";
 
 export interface NewsArticle {
   id: string;
@@ -12,23 +12,22 @@ export interface NewsArticle {
   sourceImg: string;
 }
 const NEWS_URL =
-  'https://min-api.cryptocompare.com/data/v2/news/?feeds=cryptocompare,cointelegraph,coindesk&extraParams=YourSite';
+  "https://min-api.cryptocompare.com/data/v2/news/?feeds=cryptocompare,cointelegraph,coindesk&extraParams=YourSite";
 const API_KEY = process.env.CRYPTOCOMPARE;
 
 const getNews = unstable_cache(
   async (): Promise<NewsArticle[]> => {
     const headers: Record<string, string> = {
-      accept: 'application/json',
-      'Cache-Control': 'no-store',
+      accept: "application/json",
     };
 
     // API_KEY tanımlıysa headers içine ekliyoruz
     if (API_KEY) {
-      headers['api_key'] = API_KEY;
+      headers["api_key"] = API_KEY;
     }
 
     const options = {
-      method: 'GET',
+      method: "GET",
       headers,
     };
 
@@ -52,11 +51,11 @@ const getNews = unstable_cache(
         sourceImg: news.source_info.img,
       }));
     } else {
-      throw new Error('Invalid data format');
+      throw new Error("Invalid data format");
     }
   },
-  ['news'], // Cache key
-  { revalidate: 3600, tags: ['news'] } // Revalidate after 1 hour
+  ["news"], // Cache key
+  { revalidate: 3600, tags: ["news"] }, // Revalidate after 1 hour
 );
 
 export const fetchNews = async (): Promise<NewsArticle[]> => {

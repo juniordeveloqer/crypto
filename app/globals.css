@@ -107,4 +107,20 @@
   transform: scale(1.2);
 }
 
+.breathing {
+  width: 12px;
+  height: 12px;
+  background-color: #00ff00; /* Bright green for "live" */
+  border-radius: 50%;
+  animation: breathing 1.5s ease-in-out infinite;
+}
 
+@keyframes breathing {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2); /* Change this to make it bigger */
+  }
+}

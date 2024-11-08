@@ -1,4 +1,4 @@
-import "server-only";
+import { NextResponse } from "next/server";
 import { SignJWT, jwtVerify } from "jose";
 import { SessionPayload, User } from "@/lib/definitions";
 import { cookies } from "next/headers";
@@ -21,32 +21,26 @@ export async function decrypt(session: string | undefined = "") {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
-
-    // Ensure payload is of type SessionPayload
     return payload as SessionPayload;
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Failed to verify session:", error.message);
-    } else {
-      console.error("An unknown error occurred during session verification");
-    }
+    console.error("Failed to verify session:", error);
     return null; // Return null if decryption fails
   }
 }
 
+// Create a new session and set the token as a cookie
 export async function createSession(user: User) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
   const sessionPayload: SessionPayload = {
     userId: user._id,
     role: user.role,
     createdAt: new Date(),
     expiresAt: expiresAt,
   };
-
   const session = await encrypt(sessionPayload);
 
-  cookies().set("token", session, { // Çerez adı 'token' olarak güncellendi
+  const response = NextResponse.next();
+  response.cookies.set("token", session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -54,19 +48,25 @@ export async function createSession(user: User) {
     path: "/",
   });
 
-  return session;
+  return response;
 }
 
-
+// Update an existing session and reset the expiration time
 export async function updateSession() {
-  const session = cookies().get("token")?.value; // Çerez adı 'token' olarak güncellendi
-  const payload = await decrypt(session);
+  // Await the result of cookies() since it's now asynchronous
+  const sessionCookies = await cookies();
+  const session = sessionCookies.get("token")?.value;
 
-  if (!session || !payload) {
+  if (!session) {
     return null;
   }
 
-  // Ensure payload is of type SessionPayload
+  const payload = await decrypt(session);
+
+  if (!payload) {
+    return null;
+  }
+
   const newExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const newSessionPayload: SessionPayload = {
     userId: payload.userId,
@@ -74,10 +74,10 @@ export async function updateSession() {
     createdAt: payload.createdAt,
     expiresAt: newExpiresAt,
   };
-
   const newSession = await encrypt(newSessionPayload);
 
-  cookies().set("token", newSession, { // Çerez adı 'token' olarak güncellendi
+  const response = NextResponse.next();
+  response.cookies.set("token", newSession, {
     httpOnly: true,
     secure: true,
     expires: newExpiresAt,
@@ -85,11 +85,18 @@ export async function updateSession() {
     path: "/",
   });
 
-  return newSession;
+  return response;
 }
 
-
-// Delete session cookie
+// Delete the session by expiring the token cookie
 export function deleteSession() {
-  cookies().delete("token");  // Çerez adı burada 'token'
+  const response = NextResponse.redirect("/");
+  response.cookies.set("token", "", {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(0),
+    sameSite: "lax",
+    path: "/",
+  });
+  return response;
 }
