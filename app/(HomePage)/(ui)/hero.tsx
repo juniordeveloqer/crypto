@@ -12,18 +12,12 @@ import CryptoPriceUpdater from "@/components/CryptoPrices";
 import { WebSocketProvider } from "@/components/WebSocketContext";
 import Image from "next/image";
 import Link from "next/link";
-import fetchBitcoinPosts from "@/components/GetEndPoints/fetchRedditPosts";
 
-interface Post {
-  title: string;
-  url: string;
-  score: number;
-  created: number;
-  author: string;
-}
+import RedditSection from '@/components/redditapi/RedditSection'
+
 const Hero = async () => {
   const coinSymbols = ["BTC", "ETH", "SOL"];
-  const posts: Post[] = await fetchBitcoinPosts();
+
 
   // Fetch all data simultaneously
   const [coinInfos, initialPrices, cryptoChanges, newsArticles, nftInfos] =
@@ -57,36 +51,11 @@ const Hero = async () => {
                 Sign Up
               </button>
             </div>
-            <div className="mt-[135px] mr-24  p-4 bg-[#0d131d] rounded-[20px] border border-[#000000]">
-              <h3 className="text-lg font-bold mb-2 flex items-center">
-                <span className="breathing mr-2"></span>
-                <span className="mr-1">Live</span>
-                <span className="text-[#FF4500] mr-1">Reddit</span>
-                <span className="mr-1">Posts From</span>{" "}
-                {/* Added margin to match spacing */}
-                <span>Bitcoin Subreddit</span>
-              </h3>
-              <div className="overflow-auto max-h-[98px] border border-gray-600 rounded-lg">
-                {posts.length > 0 ? (
-                  posts.map((post, index) => (
-                    <div
-                      key={index}
-                      className="mb-2 flex items-center p-2 hover:bg-gray-800 rounded"
-                    >
-                      <Link
-                        href={post.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <p className="text-white text-sm">{post.title}</p>
-                      </Link>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400 text-sm">No posts available.</p>
-                )}
-              </div>
-            </div>
+            <div>
+     
+      {/* RedditSection bileşenini kullanıyoruz */}
+      <RedditSection />
+    </div>
           </div>
 
           <div className="w-[542px] h-[211px] rounded-[20px] bg-[#0d131d] mt-[75px]">

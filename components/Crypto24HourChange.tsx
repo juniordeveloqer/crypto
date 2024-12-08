@@ -15,9 +15,6 @@ export const fetchCryptoChange = async (): Promise<CryptoChanges> => {
 
     const data = await response.json();
 
-    // Log the API response to the console
-    console.log("RAW Data:", data.RAW);
-
     if (!data.RAW) {
       throw new Error(
         "Invalid data structure: 'RAW' field missing in response",

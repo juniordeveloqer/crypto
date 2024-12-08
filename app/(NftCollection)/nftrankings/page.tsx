@@ -1,10 +1,10 @@
-// app/collections/page.tsx
 import React from "react";
 import { getCombinedData } from "@/components/NftCollectiondata"; 
 import CollectionList from "@/components/Collection/CollectionList";
 
 export default async function CollectionsStatsPage() {
-  const initialData = await getCombinedData(0, 20); // Fetch the first 20 items for SSR
+  // SSR: Fetch the first 20 items
+  const initialData = await getCombinedData(0, 20); 
 
   return (
     <div className="text-white max-w-[80%] mx-auto">
@@ -15,7 +15,7 @@ export default async function CollectionsStatsPage() {
         </p>
       </div>
       {/* Render the initial data */}
-      <CollectionList data={initialData} />
+      <CollectionList initialData={initialData} />
     </div>
   );
 }

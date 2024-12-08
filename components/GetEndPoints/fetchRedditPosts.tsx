@@ -1,31 +1,36 @@
-// app/reddit/fetchRedditPosts.ts
+import fetch from 'node-fetch';
 
-import { unstable_cache } from "next/cache";
+interface RedditPost {
+  title: string;
+  url: string;
+  score: number; // score eklendi
+  created: number; // created eklendi
+  author: string; // author eklendi
+}
 
-const fetchBitcoinPosts = unstable_cache(
-  async (): Promise<any[]> => {
-    const res = await fetch('https://www.reddit.com/r/Bitcoin/hot.json?limit=5', {
+export async function fetchRedditPosts(token: string): Promise<RedditPost[]> {
+  try {
+    const response = await fetch('https://oauth.reddit.com/r/Bitcoin/hot.json?limit=5', {
       headers: {
-        'User-Agent': 'CryptoInfoFetcher/1.0 by Acrobatic_Fee_5514', // Reddit API için zorunlu User-Agent
+        'Authorization': `bearer ${token}`,
+        'User-Agent': process.env.USER_AGENT || 'DefaultUserAgent',
       },
     });
 
-    if (!res.ok) {
-      const errorResponse = await res.text();
-      throw new Error(`Failed to fetch: ${res.status} ${errorResponse}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.status}`);
     }
 
-    const data = await res.json();
+    const data = await response.json();
     return data.data.children.map((post: any) => ({
       title: post.data.title,
       url: post.data.url,
-      score: post.data.score,
+      score: post.data.score,  // eksik olan özellikler eklendi
       created: post.data.created_utc,
       author: post.data.author,
     }));
-  },
-  ["bitcoin-posts"], // Cache key
-  { revalidate: 3600 } // Her saatte bir yeniden doğrula
-);
-
-export default fetchBitcoinPosts;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw new Error('Error fetching Reddit posts');
+  }
+}

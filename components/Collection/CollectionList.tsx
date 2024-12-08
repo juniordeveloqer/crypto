@@ -1,5 +1,6 @@
-// components/CollectionList.tsx
-import React from "react";
+"use client"; // This marks the file as a client component
+
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import StarToggle from "@/components/StarToggle";
@@ -9,13 +10,15 @@ interface CollectionItemProps {
   collection: any;
 }
 
-const CollectionList: React.FC<{ data: CollectionItemProps[] }> = ({ data }) => {
+const CollectionList: React.FC<{ initialData: CollectionItemProps[] }> = ({ initialData }) => {
+  const [items, setItems] = useState(initialData);  // Use SSR data as the initial state
+  const [offset, setOffset] = useState(initialData.length); // Keep track of the data offset for CSR
+
   return (
     <>
       <table className="min-w-full table-auto bg-black text-white rounded-lg shadow-lg">
-        {/* Table Headers */}
         <tbody>
-          {data.map((item, index) => (
+          {items.map((item, index) => (
             <tr key={index} className="border-gray-700 hover:bg-gray-800 transition-all">
               <td className="px-4 py-2 text-left flex items-center">
                 <StarToggle index={index} />
@@ -32,13 +35,13 @@ const CollectionList: React.FC<{ data: CollectionItemProps[] }> = ({ data }) => 
                   </div>
                 </Link>
               </td>
-              {/* Additional Table Data */}
             </tr>
           ))}
         </tbody>
       </table>
-      {/* Load More Button */}
-      <LoadMoreButton currentData={data} />
+
+      {/* Load More Button to load more items */}
+      <LoadMoreButton setItems={setItems} offset={offset} />
     </>
   );
 };

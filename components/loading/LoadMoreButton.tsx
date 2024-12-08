@@ -1,55 +1,28 @@
-// components/loading/LoadMoreButton.tsx
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface LoadMoreButtonProps {
-  currentData: any[];
+  setItems: React.Dispatch<React.SetStateAction<any[]>>;
+  offset: number;
 }
 
-const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ currentData }) => {
-  const [items, setItems] = useState(currentData);
-  const [offset, setOffset] = useState(currentData.length);
+const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ setItems, offset }) => {
   const [loading, setLoading] = useState(false);
-  const loadMoreRef = useRef(null);
 
   const fetchMoreData = async () => {
-    if (loading) return; // Prevent multiple calls
+    if (loading) return; // Prevent multiple fetch requests
     setLoading(true);
 
-    // Logging the API endpoint URL to verify its structure
-    const apiUrl = `/api/getCombinedData?offset=${offset}&limit=20`;
-    console.log("Fetching data from:", apiUrl);
+    const apiUrl = `/api/getCombinedData?offset=${offset}&limit=20`; // Adjust API endpoint accordingly
 
     try {
       const res = await fetch(apiUrl);
-      console.log("Fetch response received:", res);
-
-      // Check if the response status is not OK
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(
-          `Failed to fetch more items: ${res.status} - ${errorText}`,
-        );
-      }
-
-      console.log("Response Status:", res.status); // Log response status
-      console.log("Response Headers:", res.headers); // Log headers to see if any additional debugging info is available
+      if (!res.ok) throw new Error("Failed to fetch data");
 
       const newItems = await res.json();
-      console.log("Fetched new items:", newItems); // Log the actual data fetched
-
-      // Update the items and offset if data was fetched successfully
       setItems((prevItems) => [...prevItems, ...newItems]);
-      setOffset((prevOffset) => prevOffset + newItems.length);
     } catch (error) {
       console.error("Error loading more items:", error);
-
-      // Log specific information about the error
-      if (error instanceof SyntaxError) {
-        console.error("JSON parsing error:", error.message);
-      } else {
-        console.error("General fetch error:", error.message);
-      }
     }
 
     setLoading(false);
@@ -60,25 +33,24 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ currentData }) => {
       async (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting && !loading) {
-          await fetchMoreData();
+          fetchMoreData();
         }
       },
-      { rootMargin: "100px" },
+      { rootMargin: "100px" }
     );
 
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+    const loadMoreRef = document.getElementById("loadMoreRef");
+    if (loadMoreRef) observer.observe(loadMoreRef);
+
     return () => {
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+      if (loadMoreRef) observer.unobserve(loadMoreRef);
     };
   }, [offset]);
 
   return (
     <>
-      {items.map((item, index) => (
-        <div key={index}>{/* Render each new item here as needed */}</div>
-      ))}
-      <div ref={loadMoreRef} className="flex justify-center my-4">
-        {loading && <p>Loading...</p>}
+      <div id="loadMoreRef" className="flex justify-center my-4">
+        {loading ? <p>Loading...</p> : <p>Scroll down to load more...</p>}
       </div>
     </>
   );
