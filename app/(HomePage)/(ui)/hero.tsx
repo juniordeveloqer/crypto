@@ -102,6 +102,15 @@ const Hero = async () => {
                   </div>
                 );
               })}
+               <div className="mt-3 pl-9">
+                <Link
+                  href={{
+                    pathname: "/allcryptolistings",
+                  }}
+                >
+                  View All Coins
+                </Link>
+              </div>
             </div>
 
             {/* News Section */}
