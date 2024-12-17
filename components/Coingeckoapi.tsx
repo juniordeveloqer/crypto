@@ -1,4 +1,4 @@
-let cachedPrices: { BTC?: number; ETH?: number; SOL?: number } = {};
+let cachedPrices: { BTC?: number; ETH?: number; SOL?: number; ADA?: number; XRP?: number; DOGE?: number } = {};
 let lastFetched: number = 0;
 
 export const getCryptoPrices = async () => {
@@ -11,30 +11,33 @@ export const getCryptoPrices = async () => {
       BTC: cachedPrices.BTC,
       ETH: cachedPrices.ETH,
       SOL: cachedPrices.SOL,
+      ADA: cachedPrices.ADA,
+      XRP: cachedPrices.XRP,
     }; // Cache'den döner
   }
 
   // Veriyi API'den çek
-  const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd`, {});
-
+  const res = await fetch(
+    `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,cardano,ripple,dogecoin&vs_currencies=usd`
+  );
   if (!res.ok) {
     throw new Error('Failed to fetch data');
   }
 
   const data = await res.json();
-  const prices = {
-    BTC: data.bitcoin.usd,
-    ETH: data.ethereum.usd,
-    SOL: data.solana.usd,
-  };
+ 
+const prices = {
+  BTC: data.bitcoin.usd,
+  ETH: data.ethereum.usd,
+  SOL: data.solana.usd,
+  ADA: data.cardano.usd,
+  XRP: data.ripple.usd,
+  DOGE: data.dogecoin.usd,
+};
 
   // Cache'i güncelle
   cachedPrices = prices;
   lastFetched = Date.now();
 
-  return {
-    BTC: prices.BTC,
-    ETH: prices.ETH,
-    SOL: prices.SOL,
-  };
+  return prices;
 };

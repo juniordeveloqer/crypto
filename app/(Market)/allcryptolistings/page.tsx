@@ -6,13 +6,14 @@ import {
   fetchCryptoChange,
   CryptoChanges,
 } from "@/components/Crypto24HourChange";
-
+import ClientOnlyMarketCapData from "@/components/FetchTopMarketCap";
 import CryptoPriceUpdater from "@/components/CryptoPrices";
-import { WebSocketProvider } from "@/components/WebSocketContext";
+import { WebSocketProvider, useWebSocket } from "@/components/WebSocketContext";
 export default async function CollectionsStatsPage() {
 
-    const coinSymbols = ["BTC", "ETH", "SOL"];
-  
+  const coinSymbols = ["BTC", "ETH", "SOL", "ADA", "XRP", "DOGE"];
+
+
   
     // Fetch all data simultaneously
     const [coinInfos, initialPrices, cryptoChanges,] =
@@ -32,50 +33,67 @@ export default async function CollectionsStatsPage() {
         View a full list of active cryptocurrencies
         </p>
       </div>
-      <div>
-              {coinSymbols.map((coinSymbol, index) => {
-                const coinInfo = coinInfos.find(
-                  (info) => info.Name === coinSymbol,
-                );
-                const price = initialPrices[coinSymbol];
-                const change = cryptoChanges[coinSymbol];
+      <div className="grid grid-cols-3 gap-6 mt-6">
+          {coinSymbols.map((coinSymbol, index) => {
+            const coinInfo = coinInfos.find((info) => info.Name === coinSymbol);
+            const price = initialPrices[coinSymbol];
+            const change = cryptoChanges[coinSymbol];
+            const isPositiveChange = parseFloat(change) > 0;
 
-                return (
-                  <div key={coinSymbol} className="flex items-center mx-6 my-3">
-                    <img
-                      src={coinInfo?.ImageUrl}
-                      alt={coinInfo?.Name}
-                      className="w-7 h-7 mr-1"
-                    />
-                    <div className="flex flex-grow gap-1 items-end">
-                      <h3 className="text-sm font-semibold">
-                        {coinInfo?.Name}
-                      </h3>
-                      <p className="text-xs">{coinInfo?.FullName}</p>
-                    </div>
-                    <div className="flex gap-3 items-baseline">
-                      <CryptoPriceUpdater
-                        coin={coinSymbol}
-                        initialPrice={price}
-                      />
+            return (
+              <div
+                key={coinSymbol}
+                className="relative flex items-center justify-between bg-gray-900 p-6 rounded-xl shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500"
+              >
+                {/* Coin logo */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={coinInfo?.ImageUrl}
+                    alt={coinInfo?.Name}
+                    className="w-16 h-16 transition-all duration-500 ease-in-out transform hover:scale-125 glow-effect"
+                  />
+                </div>
+
+                {/* Coin info side-by-side */}
+                <div className="flex flex-grow justify-between items-center">
+                  <div className="text-center flex flex-col items-center ml-4">
+                    <h3 className="text-xl font-semibold">{coinInfo?.Name}</h3>
+                    <p className="text-sm text-gray-400">{coinInfo?.FullName}</p>
+                  </div>
+
+                  <div className="text-center ml-4 flex flex-col items-center">
+                    <CryptoPriceUpdater coin={coinSymbol} initialPrice={price} />
+                    <div className="mt-2 flex justify-center items-center">
                       <p
-                        className={`text-sm ${
-                          parseFloat(change) > 0
-                            ? "text-green-500"
-                            : "text-red-500"
+                        className={`text-lg font-semibold ${
+                          isPositiveChange ? "text-green-500" : "text-red-500"
                         }`}
                       >
                         {change}%
                       </p>
+                      {/* Directional arrow animation */}
+                      <span
+                        className={`ml-2 inline-block ${
+                          isPositiveChange ? "animate-pulse-up" : "animate-pulse-down"
+                        }`}
+                      >
+                        {isPositiveChange ? "↑" : "↓"}
+                      </span>
                     </div>
                   </div>
-                );
-              })}
-               <div className="mt-3 pl-9">
-              
+                </div>
+
+                {/* Hover effect to show extra coin details */}
+                <div className="absolute top-2 right-2 text-xs font-semibold bg-gray-700 text-white p-1 rounded-lg opacity-0 hover:opacity-100 transition-opacity ease-in-out duration-200">
+                  <p>{coinInfo?.FullName}</p>
+                </div>
+           
               </div>
-            </div>
-     
+            );
+          })}
+        </div>
+
+        <ClientOnlyMarketCapData />
     </div>
     </WebSocketProvider>
   );

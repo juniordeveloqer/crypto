@@ -22,6 +22,7 @@ const config = {
         textPrimary: "#FFFFFF",
         textSecondary: "#363636",
         PlaceholderColor: "#DCDCDC",
+        neonGreen: '#39FF14',
         button: {
           signup: "#55A96D",
           Primary: "#26C553",
@@ -32,6 +33,48 @@ const config = {
           Login: "#263238",
         },
       },
+
+      animation: {
+        'border-reverse': 'border-reverse 4s linear infinite',
+      },
+
+      keyframes: {
+        'border-reverse': {
+          '0%': {
+            borderTopColor: 'transparent',
+            borderLeftColor: 'transparent',
+            borderBottomColor: 'transparent',
+            borderRightColor: 'transparent',
+          },
+          '25%': {
+            borderTopColor: 'transparent',
+            borderLeftColor: 'transparent',
+            borderBottomColor: 'transparent',
+            borderRightColor: 'neon-green',
+          },
+          '50%': {
+            borderTopColor: 'transparent',
+            borderLeftColor: 'transparent',
+            borderBottomColor: 'neon-green',
+            borderRightColor: 'neon-green',
+          },
+          '75%': {
+            borderTopColor: 'transparent',
+            borderLeftColor: 'neon-green',
+            borderBottomColor: 'neon-green',
+            borderRightColor: 'neon-green',
+          },
+          '100%': {
+            borderTopColor: 'neon-green',
+            borderLeftColor: 'neon-green',
+            borderBottomColor: 'neon-green',
+            borderRightColor: 'neon-green',
+          },
+        },
+      },
+
+
+
       fontFamily: {
         sans: ["var(--font-titillium_web)"],
       },
