@@ -2,6 +2,7 @@ import React from "react";
 
 import { getCryptoPrices } from "@/components/Coingeckoapi";
 import { fetchgeneralinfo, CoinInfo } from "@/components/CryptoGeneralInfo";
+import { CryptoTop24hVolumeList, CoinGeneralInfo } from "@/components/CryptoTop24hVolumeList";
 import {
   fetchCryptoChange,
   CryptoChanges,
@@ -12,13 +13,14 @@ import { WebSocketProvider, useWebSocket } from "@/components/WebSocketContext";
 export default async function CollectionsStatsPage() {
 
   const coinSymbols = ["BTC", "ETH", "SOL", "ADA", "XRP", "DOGE"];
-
+  const coins: CoinGeneralInfo[] = await CryptoTop24hVolumeList();
 
   
     // Fetch all data simultaneously
     const [coinInfos, initialPrices, cryptoChanges,] =
       await Promise.all([
         fetchgeneralinfo(coinSymbols),
+        CryptoTop24hVolumeList(),
         getCryptoPrices(),
         fetchCryptoChange(),
      
@@ -94,6 +96,25 @@ export default async function CollectionsStatsPage() {
         </div>
 
         <ClientOnlyMarketCapData />
+        <div className="grid grid-cols-3 gap-6 mt-6">
+        {coins.map((coin) => (
+          <div
+            key={coin.Id}
+            className="relative flex flex-col items-center bg-gray-900 p-6 rounded-xl shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500"
+          >
+            <img
+              src={coin.ImageUrl}
+              alt={coin.FullName}
+              className="w-16 h-16 transition-all duration-500 ease-in-out transform hover:scale-125 glow-effect"
+            />
+            <h3 className="text-xl font-semibold mt-2">{coin.Name}</h3>
+            <p className="text-sm text-gray-400">{coin.FullName}</p>
+            <p className="mt-2 text-lg text-white">
+              24h Volume: <span className="font-bold">{coin.TotalVolume}</span>
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
     </WebSocketProvider>
   );
